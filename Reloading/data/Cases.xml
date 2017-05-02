@@ -1,0 +1,10 @@
+<Cases>
+	<Case CartridgeId="1" ClassName="com.reloading.components.Case" Id="1" Manufacturer="Remington" Name="7mm Bench Rest Remington" ShortName="7BR Rem"></Case>
+	<Case CartridgeId="1" Id="2"
+		ClassName="com.reloading.components.Case" Manufacturer="Lapua"
+		Name="7mm Bench Rest Lapua" ShortName="7BR Lapua">
+	</Case>
+	<Case CartridgeId="2" ClassName="com.reloading.components.Case"
+		Id="3" Manufacturer="Winchester" Name="7TCU Winchester"
+		ShortName="7TCU Win">
+	</Case></Cases>

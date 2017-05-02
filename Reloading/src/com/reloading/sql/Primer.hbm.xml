@@ -1,0 +1,12 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+    <class name="com.reloading.components.Primer" table="reloadingLog.Primers">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+	</id>
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+    </class>
+</hibernate-mapping>

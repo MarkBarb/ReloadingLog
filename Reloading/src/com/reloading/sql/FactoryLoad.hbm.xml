@@ -1,0 +1,15 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity" default-lazy="false">
+    <class name="com.reloading.components.FactoryLoad" table="reloadingLog.factoryloads">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+	</id>
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+<many-to-one name="Cartridge" column="CartridgeId"  class="com.reloading.components.Cartridge" not-null="true" lazy="false"/>
+	
+
+    </class>
+</hibernate-mapping>

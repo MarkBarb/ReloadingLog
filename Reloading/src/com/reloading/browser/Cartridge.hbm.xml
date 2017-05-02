@@ -1,0 +1,13 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+    <class name="com.reloading.components.Cartridge" table="reloadingLog.Cartridges">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+	</id>
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+        <property name="nominalSize" column="NominalSize"></property>
+    </class>
+</hibernate-mapping>

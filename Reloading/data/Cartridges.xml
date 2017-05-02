@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Cartridges>
+	<Cartridge ClassName="com.reloading.components.Cartridge" Id="1" Manufacturer="Remington" Name="7mm Bench Rest" NominalSize="0.285" ShortName="7BR"/><Cartridge ClassName="com.reloading.components.Cartridge" Id="2" Manufacturer="Thomson Center Ugalde" Name="7mm Thomson Center Ugalde" NominalSize=".285" ShortName="7TCU">
+</Cartridge><Cartridge ClassName="com.reloading.components.Cartridge" Id="3" Manufacturer="" Name=".22 Long Rifle" NominalSize="0.224" ShortName=".22 LR"/></Cartridges>

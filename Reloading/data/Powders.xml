@@ -1,0 +1,5 @@
+<Powders>
+	<Powder Id="1" ShortName="H4895" Name="H4895" Manufacturer="Hodgdon" ClassName="com.reloading.components.Powder"></Powder>
+	<Powder ClassName="com.reloading.components.Powder" Id="2"
+		Manufacturer="Hodgdon" Name="H322" ShortName="H322">
+	</Powder></Powders>
