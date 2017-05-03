@@ -1,0 +1,36 @@
+{"Firearms":
+	[
+		{"ClassName":"com.reloading.components.Firearm" 
+		,"Id":"1" 
+		,"Manufacturer":"Remington" 
+		,"Model":"XP100" 
+		,"Name":"XP100" 
+		,"Serial":"SN19111111" 
+		,"ShortName":"XP100"
+		}
+		,{"ClassName":"com.reloading.components.Firearm" 
+		,"Id":"2" 
+		,"Manufacturer":"Thomson Center" 
+		,"Model":"Encore" 
+		,"Name":"Encore" 
+		,"Serial":"SN 123456" 
+		,"ShortName":"Encore"
+		}
+		,{"ClassName":"com.reloading.components.Firearm" 
+		,"Id":"3" 
+		,"Manufacturer":"Thomson Center" 
+		,"Model":"Contender" 
+		,"Name":"Contender" 
+		,"Serial":"SN 999999" 
+		,"ShortName":"BB Contender"
+		}
+		,{"ClassName":"com.reloading.components.Firearm" 
+		,"Id":"4" 
+		,"Manufacturer":"Thomson Center" 
+		,"Model":"Contender" 
+		,"Name":"Contender" 
+		,"Serial":"SN 999999" 
+		,"ShortName":"SB Contender"
+		}
+	]
+}

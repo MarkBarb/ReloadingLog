@@ -1,0 +1,30 @@
+{"Loads":
+	[
+		{
+		"BulletId":"2" 
+		,"CartridgeId":"1" 
+		,"CaseId":"1" 
+		,"ClassName":"com.reloading.components.Reload" 
+		,"Comments":"" 
+		,"Id":"1" 
+		,"Manufacturer":"" 
+		,"Name":"Reload" 
+		,"OverAllLength":"0.0" 
+		,"PowderCharge":"24.5" 
+		,"PowderId":"1" 
+		,"PrimerId":"1" 
+		,"ShortName":"Reload"
+		,"OverAllLength":"0.0" 
+		}
+		,{
+		"CartridgeId":"3" 
+		,"ClassName":"com.reloading.components.FactoryLoad"
+		,"Comments":"Too expensive for me"  
+		,"Id":"2" 
+		,"Manufacturer":"Eley" 
+		,"Name":"Ten-X" 
+		,"ShortName":"Ten-x"
+		}
+	]
+}
+		

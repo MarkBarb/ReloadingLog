@@ -1,0 +1,21 @@
+{"Cartridges":[
+	{"ClassName":"com.reloading.components.Cartridge"
+		,"Id":"1"
+		,"Manufacturer":"Remington"
+		,"ShortName":"7BR"
+		,"NominalSize":"0.285"
+		,"Name":"7mm Bench Rest"}
+	,{"ClassName":"com.reloading.components.Cartridge"
+		,"Id":"2"
+		,"Manufacturer":"Thomson Center Ugalde"
+		,"ShortName":"7TCU"
+		,"NominalSize":".285"
+		,"Name":"7mm Thomson Center Ugalde"}
+	,{"ClassName":"com.reloading.components.Cartridge"
+		,"Id":"3"
+		,"Manufacturer":""
+		,"ShortName":".22 LR"
+		,"NominalSize":"0.224"
+		,"Name":".22 Long Rifle"}
+	]
+}

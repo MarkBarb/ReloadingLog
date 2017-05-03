@@ -1,0 +1,18 @@
+{"Powders":
+	[
+		{
+			"ClassName":"com.reloading.components.Powder"
+			,"Id":"1"
+			,"Manufacturer":"Hodgdon"
+			,"Name":"H4895" 
+			,"ShortName":"H4895"
+		}
+		,{
+			"ClassName":"com.reloading.components.Powder"
+			,"Id":"2"
+			,"Manufacturer":"Hodgdon"
+			,"Name":"H322"
+			,"ShortName":"H322"
+		}
+	]
+}

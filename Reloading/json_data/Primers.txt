@@ -1,0 +1,19 @@
+{"Primers":
+	[
+		{
+			"ClassName":"com.reloading.components.Primer"
+			,"Id":"1"
+			,"Manufacturer":"Remington"
+			,"Name":"Small Rifle Match" 
+			,"ShortName":"Rem 7 1/2"
+		}
+		,{
+			"ClassName":"com.reloading.components.Primer"
+			,"Id":"2"
+			,"Manufacturer":"Winchester-Western"
+			,"Name":"Small Rifle"
+			,"ShortName":"WW-SR"
+		}
+	]
+}
+

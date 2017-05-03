@@ -1,0 +1,30 @@
+{"Bullets":
+	[
+		{
+		"ClassName":"com.reloading.components.Bullet"
+		,"Id":"1"
+		,"BallisticCoefficient":".417"
+		,"Diameter":".284"
+		,"Name":"MatchKing"
+		,"ShortName":"Sie 7MM 150gr SMK"
+		,"Style":"Boat-tail"
+		,"Weight":"150"
+		},
+		{
+		"ClassName":"com.reloading.components.CastBullet"
+		,"Alloy":"Wheel Weights"
+		,"AsCastDiameter":"0.286"
+		,"BallisticCoefficient":"0.3"
+		,"Diameter":"0.285"
+		,"GasChecked":"false"
+		,"Id":"2"
+		,"Lube":"Bullshop Speed Green"
+		,"Manufacturer":"Lead Bullet Technology"
+		,"Name":"RCBS 28-145"
+		,"ShortName":"RCBS 28-145"
+		,"Style":"Bore Rider"
+		,"Weight":"155"
+		}
+		
+	]
+}

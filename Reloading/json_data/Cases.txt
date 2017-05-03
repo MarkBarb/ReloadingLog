@@ -1,0 +1,20 @@
+{"Cases":[
+	{"CartridgeId":"1"
+		,"ClassName":"com.reloading.components.Case"
+		,"Id":"1"
+		,"Manufacturer":"Remington"
+		,"Name":"7mm Bench Rest Remington"
+		,"ShortName":"7BR Rem"}
+	,{"CartridgeId":"1"
+		,"ClassName":"com.reloading.components.Case"
+		,"Id":"2"
+		,"Manufacturer":"Lapua"
+		,"Name":"7mm Bench Rest Lapua"
+		,"ShortName":"7BR Lapua"}
+	,{"CartridgeId":"2"
+		,"ClassName":"com.reloading.components.Case"
+		,"Manufacturer":"Winchester"
+		,"ShortName":"7TCU Win"
+		,"Id":"3"
+		,"Name":"7TCU Winchester"}
+		]}
