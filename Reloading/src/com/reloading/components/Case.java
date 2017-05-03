@@ -47,12 +47,15 @@ public class Case extends Component  implements Comparable<Case> {
 
 	
 	public String toString(){
-		if (cartridge == null){
+		if (shortName.length() > 0){
 			return shortName;
 		}
 		else {
+			if (cartridge != null) {
 			return cartridge.toString() + " " + manufacturer;
+			}
 		}
+		return name;
 	}
 
 	@Override
