@@ -1,15 +1,14 @@
 # ReloadingLog
 Java Swing application to log reloads. This is not intended to replace a reloading manual. Please understand and follow all safety rules.
 
-The reloading manual is meant to be datastore independent.  All data access methods are abstractly defined in com.reloadinglog.factory.Factory.  To change the datastore, extend the Factory class and implement the methods to fit your datastore.
+The reloading manual is meant to be datastore independent.  All data access methods are abstractly defined in com.reloadinglog.factory.Factory.  To change the datastore, extend the Factory class and implement the methods to fit your datastore.  Currently, I am working on an XML version, a JSON version and a database version using hibernate.  Currently, the XML and JSon versions are pretty stable. 
 
-Currently, the XMLFactory is working.  The JSONFactory needs to have the firearms methods implemented.  The SQLFactory needs to have the Firearms methods implemented and there are issues saving reloads.
+To use the ReloadingLog or the TargetEvaluator:
+Create directory C:\reloadingLog\configuration
+Download the appropropriate configuration file to the directory above and rename it to ReloadingLogConfiguration.properties.
 
-Usage: java com.reloading.ReloadingLogBrowser <properties filename>
-The configuration file will need a line in it like:
-FACTORYCLASS=com.reloading.xml.XmlFactory
+Download the appropropriate datafiles and edit the properties file above to point to them.
 
-The browser will use introspection and create an instance of that factory.  It will also then pass the resource bundle from the property file back to the Factory.  In the case of the XmlFactory, there are also paths to the xml files where the components are stored.
+Download the executable jar files and double click on them.  They should launch the application.
 
-There is also a target evaluator. The evaluator can be launched from the reloading log or it can be ran as a standalone app. 
 
