@@ -3,5 +3,5 @@
 	<Bullet Id="2" ClassName="com.reloading.components.CastBullet"
 		Name="RCBS 28-145" ShortName="RCBS 28-145" Diameter=".285"
 		Alloy="Wheel Weights" Lube="Bullshop Speed Green"
-		Style="LFN" Weight="155" AsCastDiameter=".286" BallisticCoefficient=".3">
+		Style="Bore Rider" Weight="155" AsCastDiameter=".286" BallisticCoefficient=".3">
 	</Bullet></Bullets>

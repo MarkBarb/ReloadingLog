@@ -29,7 +29,7 @@
 		,"Manufacturer":"Thomson Center" 
 		,"Model":"Contender" 
 		,"Name":"Contender" 
-		,"Serial":"SN 999999" 
+		,"Serial":"SN 88888" 
 		,"ShortName":"SB Contender"
 		}
 	]

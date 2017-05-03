@@ -39,24 +39,23 @@ public class JSONFactory extends Factory {
 	protected static final String BULLETFILE_KEY = "BULLETFILE";
 	protected static final String CARTRIDGEFILE_KEY = "CARTRIDGEFILE";
 	protected static final String CASEFILE_KEY = "CASEFILE";
+	protected static final String FIREARMFILE_KEY = "FIREARMFILE";
 	protected static final String POWDERFILE_KEY = "POWDERFILE";
 	protected static final String PRIMERFILE_KEY = "PRIMERFILE";
 	protected static final String LOADFILE_KEY = "LOADFILE";
-	
 
 	protected static final String BULLETID = "BulletId";
-	protected static final String CARTRIDGEID =  "CartridgeId";
-	protected static final String CASEID =  "CaseId";
-	protected static final String FIREARMID =  "FirearmId";
-	protected static final String POWDERID =  "PowderId";
-	protected static final String PRIMERID =  "PrimerId";
-	
-	
+	protected static final String CARTRIDGEID = "CartridgeId";
+	protected static final String CASEID = "CaseId";
+	protected static final String FIREARMID = "FirearmId";
+	protected static final String POWDERID = "PowderId";
+	protected static final String PRIMERID = "PrimerId";
 
 	// private NodeList cartidgesNodeList;
 	private int maxBulletID = 0;
 	private int maxCartridgeID = 0;
 	private int maxCaseID = 0;
+	private int maxFirearmID = 0;
 	private int maxPowderID = 0;
 	private int maxPrimerID = 0;
 	private int maxLoadID = 0;
@@ -64,6 +63,7 @@ public class JSONFactory extends Factory {
 	private String bulletsFileName = "";
 	private String cartridgesFileName = "";
 	private String casesFileName = "";
+	private String firearmsFileName = "";
 	private String powdersFileName = "";
 	private String primersFileName = "";
 	private String loadsFileName = "";
@@ -71,9 +71,34 @@ public class JSONFactory extends Factory {
 	protected HashMap<Integer, Component> bullets;
 	protected HashMap<Integer, Component> cartridges;
 	protected HashMap<Integer, Component> cases;
+	protected HashMap<Integer, Component> firearms;
 	protected HashMap<Integer, Component> powders;
 	protected HashMap<Integer, Component> primers;
 	protected HashMap<Integer, Component> loads;
+
+	public JSONFactory() {
+		// TODO Auto-generated constructor stub
+		bullets = new HashMap<Integer, Component>();
+		cases = new HashMap<Integer, Component>();
+		cartridges = new HashMap<Integer, Component>();
+		firearms = new HashMap<Integer, Component>();
+		powders = new HashMap<Integer, Component>();
+		primers = new HashMap<Integer, Component>();
+		loads = new HashMap<Integer, Component>();
+	}
+
+	public JSONFactory(String resourceFileName) {
+		super(resourceFileName);
+		bullets = new HashMap<Integer, Component>();
+		cases = new HashMap<Integer, Component>();
+		cartridges = new HashMap<Integer, Component>();
+		firearms = new HashMap<Integer, Component>();
+		powders = new HashMap<Integer, Component>();
+		primers = new HashMap<Integer, Component>();
+		loads = new HashMap<Integer, Component>();
+		loadResources();
+	}
+
 	/**
 	 * Loads the data from each individual xml file specified in the resource
 	 * bundle.
@@ -86,11 +111,14 @@ public class JSONFactory extends Factory {
 		// Load Cartridges
 		cartridgesFileName = propertyResourceBundle.getString(CARTRIDGEFILE_KEY);
 		maxCartridgeID = setComponentMap(cartridges, cartridgesFileName, Constants.CARTRIDGES);
-		
+
 		// Load Cases
 		casesFileName = propertyResourceBundle.getString(CASEFILE_KEY);
 		maxCaseID = setCompositeComponentMap(cases, casesFileName, Constants.CASES);
-		
+		// Load Firearms
+		firearmsFileName = propertyResourceBundle.getString(FIREARMFILE_KEY);
+		maxFirearmID = setComponentMap(firearms, firearmsFileName, Constants.FIREARMS);
+
 		// Load Powders
 		powdersFileName = propertyResourceBundle.getString(POWDERFILE_KEY);
 		maxPowderID = setComponentMap(powders, powdersFileName, Constants.POWDERS);
@@ -98,12 +126,13 @@ public class JSONFactory extends Factory {
 		// Load Primers
 		primersFileName = propertyResourceBundle.getString(PRIMERFILE_KEY);
 		maxPrimerID = setComponentMap(primers, primersFileName, Constants.PRIMERS);
-		
+
 		// Load loads
 		loadsFileName = propertyResourceBundle.getString(LOADFILE_KEY);
-		maxLoadID = setCompositeComponentMap(loads,loadsFileName,Constants.LOADS);
-					
+		maxLoadID = setCompositeComponentMap(loads, loadsFileName, Constants.LOADS);
+
 	}
+
 	/**
 	 * 
 	 * @param componentMap
@@ -119,42 +148,40 @@ public class JSONFactory extends Factory {
 		int maxID = 0;
 		System.out.println("ComponentFileName: " + componentFileName + "\tArrayName: " + arrayName);
 		File componentFile = new File(componentFileName);
-		JSONParser  parser = new JSONParser ();
+		JSONParser parser = new JSONParser();
 		try {
 			Object obj = parser.parse(new FileReader(componentFileName));
 			JSONObject jsonObject = (JSONObject) obj;
 			JSONArray componentArray = (JSONArray) jsonObject.get(arrayName);
-			for(int index = 0;index< componentArray.size();index++){
-				JSONObject jSonComponent = (JSONObject)componentArray.get(index);
-				String className = (String)jSonComponent.get(Constants.CLASSNAME);
+			for (int index = 0; index < componentArray.size(); index++) {
+				JSONObject jSonComponent = (JSONObject) componentArray.get(index);
+				String className = (String) jSonComponent.get(Constants.CLASSNAME);
 				System.out.println("\n*******************************************");
 				System.out.println("ClassName: " + className);
 				Class componentClass = Class.forName(className);
 				Component component = (Component) componentClass.newInstance();
-				int id = Integer.parseInt((String)jSonComponent.get(Constants.ID));
-				if (id > maxID){
+				int id = Integer.parseInt((String) jSonComponent.get(Constants.ID));
+				if (id > maxID) {
 					maxID = id;
 				}
 				Set keySet = jSonComponent.keySet();
 				Iterator iterator = keySet.iterator();
-				while(iterator.hasNext()){
-					String attributeName = (String)iterator.next();
-					String value = (String)jSonComponent.get(attributeName);
+				while (iterator.hasNext()) {
+					String attributeName = (String) iterator.next();
+					String value = (String) jSonComponent.get(attributeName);
 
-					//System.out.println("\tattributeName: " + attributeName + " Value: " + value);
+					// System.out.println("\tattributeName: " + attributeName +
+					// " Value: " + value);
 					component.setAttribute(attributeName, value);
 				}
-				
-				//System.out.println("*******************************************\n");
+
+				// System.out.println("*******************************************\n");
 				component.setId(id);
 				componentMap.put(new Integer(id), component);
-				
+
 			}
-			
-		
-			
-		}
-		catch (ClassNotFoundException e) {
+
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -163,8 +190,7 @@ public class JSONFactory extends Factory {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -175,7 +201,9 @@ public class JSONFactory extends Factory {
 			e.printStackTrace();
 		}
 		return maxID;
-	}/**
+	}
+
+	/**
 	 * 
 	 * @param componentMap
 	 *            The map that will hold the components
@@ -186,55 +214,58 @@ public class JSONFactory extends Factory {
 	 * @return Returns the maximum id of the particular type of component that
 	 *         will be loaded
 	 */
-	private int setCompositeComponentMap(HashMap<Integer, Component> componentMap, String componentFileName, String arrayName) {
+	private int setCompositeComponentMap(HashMap<Integer, Component> componentMap, String componentFileName,
+			String arrayName) {
 		int maxID = 0;
 		System.out.println("ComponentFileName: " + componentFileName + "\tArrayName: " + arrayName);
 		File componentFile = new File(componentFileName);
-		JSONParser  parser = new JSONParser ();
+		JSONParser parser = new JSONParser();
 		try {
 			Object obj = parser.parse(new FileReader(componentFileName));
 			JSONObject jsonObject = (JSONObject) obj;
 			JSONArray componentArray = (JSONArray) jsonObject.get(arrayName);
-			for(int index = 0;index< componentArray.size();index++){
-				JSONObject jSonComponent = (JSONObject)componentArray.get(index);
-				String className = (String)jSonComponent.get(Constants.CLASSNAME);
-				//System.out.println("\n*******************************************");
-				//System.out.println("ClassName: " + className);
+			for (int index = 0; index < componentArray.size(); index++) {
+				JSONObject jSonComponent = (JSONObject) componentArray.get(index);
+				String className = (String) jSonComponent.get(Constants.CLASSNAME);
+				// System.out.println("\n*******************************************");
+				// System.out.println("ClassName: " + className);
 				Class componentClass = Class.forName(className);
 				Component component = (Component) componentClass.newInstance();
-				int id = Integer.parseInt((String)jSonComponent.get(Constants.ID));
-				if (id > maxID){
+				int id = Integer.parseInt((String) jSonComponent.get(Constants.ID));
+				if (id > maxID) {
 					maxID = id;
 				}
 				Set keySet = jSonComponent.keySet();
 				Iterator iterator = keySet.iterator();
-				while(iterator.hasNext()){
-					String attrName = (String)iterator.next();
-					String attrValue = (String)jSonComponent.get(attrName);
+				while (iterator.hasNext()) {
+					String attrName = (String) iterator.next();
+					String attrValue = (String) jSonComponent.get(attrName);
 					Integer intVal;
-					switch(attrName){
+					switch (attrName) {
 					case BULLETID:
 						intVal = new Integer(attrValue);
-						//System.out.println("Bullet ID: " + attrValue);
+						// System.out.println("Bullet ID: " + attrValue);
 						Bullet bullet = getBulletByID(intVal);
 						className = bullet.getClass().getName();
 						String bulletType = "Bullet";
-						switch(className){
+						switch (className) {
 						case Constants.CASTBULLET_CLASSNAME:
 							bulletType = "CastBullet";
 							break;
-							
-						}					
-						//System.out.println("\n***Adding Bullet: " + bullet + " ****\n");
+
+						}
+						// System.out.println("\n***Adding Bullet: " + bullet +
+						// " ****\n");
 						component.setAttribute(bulletType, bullet);
 						break;
-					case CARTRIDGEID :
+					case CARTRIDGEID:
 						intVal = new Integer(attrValue);
 						Cartridge cartridge = getCartridgeByID(intVal);
-						//System.out.println("CartridgeID: " + attrValue + "\tAdding cartridge: " + cartridge);
+						// System.out.println("CartridgeID: " + attrValue +
+						// "\tAdding cartridge: " + cartridge);
 						component.setAttribute(Constants.CARTRIDGE, cartridge);
 						break;
-					case CASEID :
+					case CASEID:
 						intVal = new Integer(attrValue);
 						Case nCase = getCaseByID(intVal);
 						component.setAttribute(Constants.CASE, nCase);
@@ -252,27 +283,26 @@ public class JSONFactory extends Factory {
 					case Constants.CLASSNAME:
 						break;
 					default:
-						//System.out.println(attrName + " " + attrValue);
+						// System.out.println(attrName + " " + attrValue);
 						component.setAttribute(attrName, attrValue);
-						/*if (attrName.compareTo("Id") == 0){
-							component.setId(attrValue);
-							System.out.println("Id: " + component.getId());
-							
-						}*/
+						/*
+						 * if (attrName.compareTo("Id") == 0){
+						 * component.setId(attrValue); System.out.println("Id: "
+						 * + component.getId());
+						 * 
+						 * }
+						 */
 						break;
 					}
 				}
-				
-				//System.out.println("*******************************************\n");
+
+				// System.out.println("*******************************************\n");
 				component.setId(id);
 				componentMap.put(new Integer(id), component);
-				
+
 			}
-			
-		
-			
-		}
-		catch (ClassNotFoundException e) {
+
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -281,8 +311,7 @@ public class JSONFactory extends Factory {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -294,59 +323,59 @@ public class JSONFactory extends Factory {
 		}
 		return maxID;
 	}
+
 	public int saveComponent(Component component, HashMap<Integer, Component> componentsMap, int maxID,
 			String componentName, String componentFileName, String[] attributes) throws ReloadingException {
-			int rtnMaxID = maxID;
-			int id = component.getId();
-			Integer iId = new Integer(id);
-			if (component.getShortName().length() < 1) {
-				ReloadingException exc = new ReloadingException("Name or Shortname is blank");
-				throw exc;
+		int rtnMaxID = maxID;
+		int id = component.getId();
+		Integer iId = new Integer(id);
+		if (component.getShortName().length() < 1) {
+			ReloadingException exc = new ReloadingException("Name or Shortname is blank");
+			throw exc;
+		}
+		if (id < 0) {
+			rtnMaxID++;
+			component.setId(rtnMaxID);
+			iId = new Integer(rtnMaxID);
+		}
+		componentsMap.put(iId, component);
+		JSONObject parentObject = new JSONObject();
+		JSONArray componentsList = new JSONArray();
+		parentObject.put(componentName, componentsList);
+
+		Collection componentCollection = componentsMap.values();
+		Iterator iterator = componentCollection.iterator();
+		while (iterator.hasNext()) {
+			Component mapComponent = (Component) iterator.next();
+			JSONObject jSONComponent = new JSONObject();
+			jSONComponent.put(Constants.CLASSNAME, mapComponent.getClass().getName());
+			jSONComponent.put(Constants.ID, Integer.toString(mapComponent.getId()));
+			jSONComponent.put(Constants.MANUFACTURER, mapComponent.getManufacturer());
+			jSONComponent.put(Constants.NAME, mapComponent.getName());
+			jSONComponent.put(Constants.SHORTNAME, mapComponent.getShortName());
+			// TODO: Need to figure this one out
+			for (int attIdx = 0; attIdx < attributes.length; attIdx++) {
+				String attributeName = attributes[attIdx];
+				System.out.println("attributeName: " + attributeName);
+				String attributeValue = mapComponent.getAttribute(attributeName);
+				jSONComponent.put(attributeName, attributeValue);
 			}
-			if (id < 0  ) {
-				rtnMaxID++;
-				component.setId(rtnMaxID);
-				iId = new Integer(rtnMaxID);
-			}
-			componentsMap.put(iId,component);
-			JSONObject parentObject = new JSONObject();
-			JSONArray componentsList = new JSONArray();
-			parentObject.put(componentName, componentsList);
-			
-			Collection componentCollection = componentsMap.values();
-			Iterator iterator = componentCollection.iterator();
-			while (iterator.hasNext()){
-				Component mapComponent = (Component)iterator.next();
-		        JSONObject jSONComponent = new JSONObject();
-		        jSONComponent.put(Constants.CLASSNAME, mapComponent.getClass().getName());
-		        jSONComponent.put(Constants.ID, Integer.toString(mapComponent.getId()));
-		        jSONComponent.put(Constants.MANUFACTURER , mapComponent.getManufacturer());
-		        jSONComponent.put(Constants.NAME, mapComponent.getName());
-		        jSONComponent.put(Constants.SHORTNAME, mapComponent.getShortName());
-		      //TODO: Need to figure this one out
-				for (int attIdx=0;attIdx<attributes.length; attIdx++){
-					String attributeName = attributes[attIdx];
-					System.out.println("attributeName: " + attributeName);
-					String attributeValue = mapComponent.getAttribute(attributeName);
-					jSONComponent.put(attributeName, attributeValue);
-				}
-				componentsList.add(jSONComponent);
-			}
-			
+			componentsList.add(jSONComponent);
+		}
 
-	        try {
-	        		FileWriter file = new FileWriter(componentFileName);
-	      
+		try {
+			FileWriter file = new FileWriter(componentFileName);
 
-	                file.write(parentObject.toJSONString());
-	                file.flush();
+			file.write(parentObject.toJSONString());
+			file.flush();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-			return rtnMaxID;
+		return rtnMaxID;
 	}
+
 	/**
 	 * Sets the resource for an XmlFactory
 	 */
@@ -354,26 +383,7 @@ public class JSONFactory extends Factory {
 		super.setPropertyResourceBundle(propertyResourceBundle);
 		loadResources();
 	}
-	public JSONFactory() {
-		// TODO Auto-generated constructor stub
-		bullets = new HashMap<Integer, Component>();
-		cases = new HashMap<Integer, Component>();
-		cartridges = new HashMap<Integer, Component>();
-		powders = new HashMap<Integer, Component>();
-		primers = new HashMap<Integer, Component>();
-		loads = new HashMap<Integer, Component>();
-	}
 
-	public JSONFactory(String resourceFileName) {
-		super(resourceFileName);
-		bullets = new HashMap<Integer, Component>();
-		cases = new HashMap<Integer, Component>();
-		cartridges = new HashMap<Integer, Component>();
-		powders = new HashMap<Integer, Component>();
-		primers = new HashMap<Integer, Component>();
-		loads = new HashMap<Integer, Component>();
-		loadResources();
-	}
 	public Bullet getBulletByID(Integer id) {
 		if (bullets.isEmpty()) {
 			return null;
@@ -382,6 +392,7 @@ public class JSONFactory extends Factory {
 		}
 		return (Bullet) bullets.get(id);
 	}
+
 	@Override
 	public Bullet getBulletByID(int id) {
 		Integer iId = new Integer(id);
@@ -405,6 +416,7 @@ public class JSONFactory extends Factory {
 		// TODO Auto-generated method stub
 
 	}
+
 	/**
 	 * 
 	 */
@@ -423,7 +435,6 @@ public class JSONFactory extends Factory {
 		return (Cartridge) cartridges.get(iId);
 	};
 
-
 	@Override
 	public ArrayList<Cartridge> getCartridges() {
 		ArrayList<Cartridge> cartridgeList = new ArrayList<Cartridge>();
@@ -437,12 +448,8 @@ public class JSONFactory extends Factory {
 
 	@Override
 	public void saveCartridge(Cartridge cartridge) throws ReloadingException {
-		maxCartridgeID=  saveComponent(cartridge
-				,cartridges
-				,maxCartridgeID
-				,Constants.CARTRIDGES
-				,cartridgesFileName 
-				,Constants.CARTRIDGE_ATTRIBUTES );
+		maxCartridgeID = saveComponent(cartridge, cartridges, maxCartridgeID, Constants.CARTRIDGES, cartridgesFileName,
+				Constants.CARTRIDGE_ATTRIBUTES);
 
 	}
 
@@ -477,21 +484,50 @@ public class JSONFactory extends Factory {
 
 	@Override
 	public void saveCase(Case nCase) throws ReloadingException {
-		maxCaseID=  saveComponent(nCase
-			,cases
-			,maxCaseID
-			,Constants.CASES
-			,casesFileName 
-			,Constants.CASE_ATTRIBUTES );
+		maxCaseID = saveComponent(nCase, cases, maxCaseID, Constants.CASES, casesFileName, Constants.CASE_ATTRIBUTES);
 
 	}
+
+	/*****************************************************************/
+	/* Firearm Handling */
+	/*****************************************************************/
+
 	@Override
-	public  Load getLoadByID(int id){
+	public Firearm getFirearmByID(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Firearm> getFirearms() {
+
+		ArrayList<Firearm> firearmList = new ArrayList<Firearm>();
+		for (Integer key : firearms.keySet()) {
+			Firearm firearm = (Firearm) firearms.get(key);
+			firearmList.add(firearm);
+		}
+		return firearmList;
+	}
+
+	@Override
+	public void saveFirearm(Firearm firearm) throws ReloadingException {
+		maxFirearmID=  saveComponent(firearm
+				,firearms
+				,maxFirearmID
+				,Constants.FIREARM
+				,firearmsFileName 
+				,Constants.FIREARM_ATTRIBUTES );
+		
+	}
+
+	
+	@Override
+	public Load getLoadByID(int id) {
 		Integer iId = new Integer(id);
 		return getLoadByID(iId);
 	}
 
-	public  Load getLoadByID(Integer id){
+	public Load getLoadByID(Integer id) {
 		if (loads.isEmpty()) {
 			return null;
 		} else if (!loads.containsKey(id)) {
@@ -501,7 +537,7 @@ public class JSONFactory extends Factory {
 	}
 
 	@Override
-	public ArrayList<Load> getLoads(){
+	public ArrayList<Load> getLoads() {
 		ArrayList<Load> loadList = new ArrayList<Load>();
 		for (Integer key : loads.keySet()) {
 			Load load = (Load) loads.get(key);
@@ -528,7 +564,7 @@ public class JSONFactory extends Factory {
 		Integer iId = new Integer(id);
 		return getPowderByID(iId);
 	}
-	
+
 	public Powder getPowderByID(Integer id) {
 		if (powders.isEmpty()) {
 			return null;
@@ -537,7 +573,7 @@ public class JSONFactory extends Factory {
 		}
 		return (Powder) powders.get(id);
 	}
-	
+
 	@Override
 	public ArrayList<Powder> getPowders() {
 		ArrayList<Powder> powderList = new ArrayList<Powder>();
@@ -551,15 +587,11 @@ public class JSONFactory extends Factory {
 
 	@Override
 	public void savePowder(Powder powder) throws ReloadingException {
-		maxPowderID=  saveComponent(powder
-			,powders
-			,maxPowderID
-			,Constants.POWDERS
-			,powdersFileName 
-			,Constants.POWDER_ATTRIBUTES );
+		maxPowderID = saveComponent(powder, powders, maxPowderID, Constants.POWDERS, powdersFileName,
+				Constants.POWDER_ATTRIBUTES);
 
 	}
-	
+
 	public Primer getPrimerByID(Integer id) {
 		if (primers.isEmpty()) {
 			return null;
@@ -568,12 +600,12 @@ public class JSONFactory extends Factory {
 		}
 		return (Primer) primers.get(id);
 	}
+
 	@Override
 	public Primer getPrimerByID(int id) {
 		Integer iId = new Integer(id);
 		return getPrimerByID(iId);
 	}
-
 
 	@Override
 	public ArrayList<Primer> getPrimers() {
@@ -586,26 +618,20 @@ public class JSONFactory extends Factory {
 	}
 
 	@Override
-	public void savePrimer(Primer primer) throws ReloadingException {maxPrimerID=  saveComponent(primer
-			,powders
-			,maxPrimerID
-			,Constants.PRIMERS
-			,primersFileName 
-			,Constants.PRIMER_ATTRIBUTES );
+	public void savePrimer(Primer primer) throws ReloadingException {
+		maxPrimerID = saveComponent(primer, powders, maxPrimerID, Constants.PRIMERS, primersFileName,
+				Constants.PRIMER_ATTRIBUTES);
 
 	}
-	
-	
-	
-	
+
 	public static void main(String args[]) {
 		System.out.println("Configuration File: " + args[0]);
 		JSONFactory factory = new JSONFactory(args[0]);
-		
+
 		System.out.println("\n*********************************************");
 		System.out.println("            Bullets");
 		System.out.println("*********************************************\n");
-		
+
 		ArrayList<Bullet> bullets = factory.getBullets();
 		for (int bullIdx = 0; bullIdx < bullets.size(); bullIdx++) {
 			Bullet bullet = bullets.get(bullIdx);
@@ -624,7 +650,7 @@ public class JSONFactory extends Factory {
 			Cartridge cartridge = cartridges.get(idx);
 			System.out.println(cartridge.getShortName());
 		}
-		
+
 		System.out.println("\n*********************************************");
 		System.out.println("            Cases");
 		System.out.println("*********************************************\n");
@@ -633,7 +659,7 @@ public class JSONFactory extends Factory {
 			Case ncase = cases.get(idx);
 			System.out.println(ncase.getShortName() + "\tcartridge: " + ncase.getCartridge().getShortName());
 		}
-		
+
 		System.out.println("\n*********************************************");
 		System.out.println("            Powders");
 		System.out.println("*********************************************\n");
@@ -642,7 +668,7 @@ public class JSONFactory extends Factory {
 			Powder powder = powders.get(idx);
 			System.out.println(powder.getShortName());
 		}
-		
+
 		System.out.println("\n*********************************************");
 		System.out.println("            Primers");
 		System.out.println("*********************************************\n");
@@ -651,20 +677,13 @@ public class JSONFactory extends Factory {
 			Primer primer = primers.get(idx);
 			System.out.println(primer.getShortName());
 		}
-	}
-	@Override
-	public Firearm getFirearmByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public ArrayList<Firearm> getFirearms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void saveFirearm(Firearm firearm) throws ReloadingException {
-		// TODO Auto-generated method stub
+		ArrayList<Firearm> firearms = factory.getFirearms();
+		System.out.println("maxFirearmID: ");
+		for (int idx = 0; idx < firearms.size(); idx++) {
+			Firearm fireArm =firearms.get(idx);
+			System.out.println("Firearm: " + fireArm.getSerial());
+		}
 		
 	}
+
 }

@@ -144,7 +144,6 @@ public class XmlFactory extends Factory {
 
 		// Load Firearms
 		firearmsFileName = propertyResourceBundle.getString(FIREARMFILE_KEY);
-		
 		maxFirearmID = setComponentMap(firearms, firearmsFileName, Constants.FIREARM);
 		
 		// Load Powders
@@ -589,6 +588,37 @@ public class XmlFactory extends Factory {
 				,Constants.CASE_ATTRIBUTES );
 	};
 
+	/*****************************************************************/
+	/* Firearm Handling */
+	/*****************************************************************/
+
+	@Override
+	public Firearm getFirearmByID(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Firearm> getFirearms() {
+
+		ArrayList<Firearm> firearmList = new ArrayList<Firearm>();
+		for (Integer key : firearms.keySet()) {
+			Firearm firearm = (Firearm) firearms.get(key);
+			firearmList.add(firearm);
+		}
+		return firearmList;
+	}
+
+	@Override
+	public void saveFirearm(Firearm firearm) throws ReloadingException {
+		maxFirearmID=  saveComponent(firearm
+				,firearms
+				,maxFirearmID
+				,Constants.FIREARM
+				,firearmsFileName 
+				,Constants.FIREARM_ATTRIBUTES );
+		
+	}
 
 	/****************************************************************/
 	/* Load Handling                                                */
@@ -754,35 +784,9 @@ public class XmlFactory extends Factory {
 				,Constants.PRIMER
 				,primersFileName 
 				,Constants.PRIMER_ATTRIBUTES );
-	}
-	@Override
-	public Firearm getFirearmByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList<Firearm> getFirearms() {
-
-		ArrayList<Firearm> firearmList = new ArrayList<Firearm>();
-		for (Integer key : firearms.keySet()) {
-			Firearm firearm = (Firearm) firearms.get(key);
-			firearmList.add(firearm);
-		}
-		return firearmList;
-	}
-
-	@Override
-	public void saveFirearm(Firearm firearm) throws ReloadingException {
-		maxFirearmID=  saveComponent(firearm
-				,firearms
-				,maxFirearmID
-				,Constants.FIREARM
-				,firearmsFileName 
-				,Constants.FIREARM_ATTRIBUTES );
-		
-	}
-
+	}	
+	
+	
 	/*****************************************************************/
 	/* main */
 	/*****************************************************************/

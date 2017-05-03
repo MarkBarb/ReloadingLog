@@ -17,6 +17,8 @@ import java.beans.PropertyChangeListener;
 import javax.imageio.ImageIO;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -28,8 +30,11 @@ import javax.swing.table.DefaultTableModel;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.PropertyResourceBundle;
 
 public class TargetEvaluator extends JFrame {
+
+	protected PropertyResourceBundle propertyResourceBundle;
 
 	private static DecimalFormat df2 = new DecimalFormat(".##");
 	private static DecimalFormat df0 = new DecimalFormat(".");
@@ -58,7 +63,21 @@ public class TargetEvaluator extends JFrame {
 	public static final int BUTTONS_HEIGHT = 100;
 
 	public static final int START_SIZE = 700;
+	
+	
+	//KEYS FOR PROPERTY FILE FOR DEFAULT VALUES
 	//
+	public static final String WITNESS_UPPER_LEFT_X_KEY = "WITNESS_UPPER_LEFT_X";
+	public static final String WITNESS_UPPER_LEFT_Y_KEY = "WITNESS_UPPER_LEFT_Y";
+	public static final String WITNESS_UPPER_RIGHT_X_KEY = "WITNESS_UPPER_RIGHT_X";
+	public static final String WITNESS_UPPER_RIGHT_Y_KEY = "WITNESS_UPPER_RIGHT_Y";
+	public static final String WITNESS_LOWER_LEFT_X_KEY = "WITNESS_LOWER_LEFT_X";
+	public static final String WITNESS_LOWER_LEFT_Y_KEY = "WITNESS_LOWER_LEFT_Y";
+	public static final String WITNESS_WIDTH_KEY = "WITNESS_WIDTH";
+	public static final String WITNESS_HEIGHT_KEY = "WITNESS_HEIGHT";
+	public static final String AIM_POINT_X_KEY = "AIM_POINT_X";
+	public static final String AIM_POINT_Y_KEY = "AIM_POINT_Y";
+	
 	private int witnessUpperLeftX = 20;
 	private int witnessUpperLeftY = 435;
 
@@ -118,6 +137,10 @@ public class TargetEvaluator extends JFrame {
 	protected JLabel witnessWidthLabel;
 	private NumberFormat targetNumberFormat;
 
+	/*************************************************************/
+	/* Constructors */
+	/*************************************************************/
+
 	private TargetEvaluator() {
 		super();
 		this.setLayout(new BorderLayout());
@@ -130,7 +153,7 @@ public class TargetEvaluator extends JFrame {
 		this.setLayout(new BorderLayout());
 		test = new TargetEvaluatorTest();
 		myFrame = this;
-		// TODO: NEED TO GET DEFAULT VALUES FOR WITNESS POINTS
+
 		Point2D.Double witnessUpperLeft = new Point2D.Double(witnessUpperLeftX, witnessUpperLeftY);
 		test.setWitnessUpperLeft(witnessUpperLeft);
 
@@ -143,7 +166,6 @@ public class TargetEvaluator extends JFrame {
 		Point2D.Double sightPoint = new Point2D.Double(aimPointX, aimPointY);
 		test.setSightPoint(sightPoint);
 
-		System.out.println("Into TargetEvaluator Constructor: " + scannedTarget);
 		buildGui(scannedTarget);
 		// Set thelayout
 		//
@@ -155,7 +177,7 @@ public class TargetEvaluator extends JFrame {
 		this.setLayout(new BorderLayout());
 		test = new TargetEvaluatorTest();
 		myFrame = this;
-		// TODO: NEED TO GET DEFAULT VALUES FOR WITNESS POINTS
+
 		Point2D.Double witnessUpperLeft = new Point2D.Double(witnessUpperLeftX, witnessUpperLeftY);
 		test.setWitnessUpperLeft(witnessUpperLeft);
 
@@ -203,14 +225,29 @@ public class TargetEvaluator extends JFrame {
 
 		Point2D.Double sightPoint = new Point2D.Double(aimPointX, aimPointY);
 		test.setSightPoint(sightPoint);
-
-		System.out.println("Into TargetEvaluator Constructor: " + test.getScannedTarget());
-		buildGui(test.getScannedTarget());
+		
+		String scannedTarget = "";
+		if (test.getScannedTarget().length() > 0) {
+			scannedTarget = test.getScannedTarget();
+		} else {
+			JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				scannedTarget = file.getAbsolutePath();
+			}
+		}
+		// System.out.println("Into TargetEvaluator Constructor: " +
+		// test.getScannedTarget());
+		buildGui(scannedTarget);
 		// Set thelayout
 		//
 
 	}
 
+	/*************************************************************/
+	/* Build GUI */
+	/*************************************************************/
 	private void buildGui(String scannedTarget) {
 		// TODO Auto-generated constructor stub
 		// targetEvaluator = new TargetEvaluator();
@@ -264,7 +301,7 @@ public class TargetEvaluator extends JFrame {
 
 	private JPanel buildButtonPanel() {
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBorder(new EmptyBorder( 8, 8, 8, 8 ));
+		buttonPanel.setBorder(new EmptyBorder(8, 8, 8, 8));
 		GridLayout buttonLayout = new GridLayout(0, 6);
 
 		Dimension size = new Dimension(LIST_WIDTH + IMAGE_WIDTH + DISPLAY_WIDTH, BUTTONS_HEIGHT);
@@ -297,8 +334,9 @@ public class TargetEvaluator extends JFrame {
 				try {
 					width = Double.parseDouble(String.valueOf(evt.getNewValue()));
 				} catch (NumberFormatException numberEx) {
-					//JOptionPane.showMessageDialog(null, "Error: Number Format Error", "Error Massage",
-					//		JOptionPane.ERROR_MESSAGE);
+					// JOptionPane.showMessageDialog(null, "Error: Number Format
+					// Error", "Error Massage",
+					// JOptionPane.ERROR_MESSAGE);
 					witnessWidth.setValue(witnessX);
 					return;
 				}
@@ -337,8 +375,9 @@ public class TargetEvaluator extends JFrame {
 				try {
 					height = Double.parseDouble(String.valueOf(evt.getNewValue()));
 				} catch (NumberFormatException numberEx) {
-					//JOptionPane.showMessageDialog(null, "Error: Number Format Error", "Error Massage",
-					//		JOptionPane.ERROR_MESSAGE);
+					// JOptionPane.showMessageDialog(null, "Error: Number Format
+					// Error", "Error Massage",
+					// JOptionPane.ERROR_MESSAGE);
 					witnessHeight.setValue(witnessY);
 					return;
 				}
@@ -400,7 +439,7 @@ public class TargetEvaluator extends JFrame {
 
 	private JPanel buildDisplayPanel() {
 		JPanel displayPanel = new JPanel();
-		displayPanel.setBorder(new EmptyBorder( 8, 8, 8, 8 ));
+		displayPanel.setBorder(new EmptyBorder(8, 8, 8, 8));
 		displayPanel.setLayout(new BorderLayout());
 		Dimension size = new Dimension(DISPLAY_WIDTH, IMAGE_HEIGHT);
 
@@ -464,22 +503,12 @@ public class TargetEvaluator extends JFrame {
 		return listPanel;
 	}
 
-	public void handleMouseClicked(MouseEvent e) {
-		/*
-		 * if (imageStartWidth == 0){ imageStartWidth = imagePanel.getWidth(); }
-		 * 
-		 * if (imageStartHeight == 0){ imageStartHeight =
-		 * imagePanel.getHeight(); } System.out.println("Original Width,Height"
-		 * + imageStartWidth + "," +imageStartHeight);
-		 * System.out.println("new Width,Height" + imagePanel.getWidth()+ "," +
-		 * imagePanel.getHeight());
-		 * 
-		 * wZoom = (double)imagePanel.getWidth()/ (double)imageStartWidth; hZoom
-		 * = (double)imagePanel.getHeight()/(double)imageStartHeight;
-		 * System.out.println("zoom " + wZoom + "," + hZoom);
-		 */
+	/*************************************************************/
+	/**/
+	/*************************************************************/
 
-		System.out.println("Mouse Click x,y " + e.getX() + "," + e.getY());
+	public void handleMouseClicked(MouseEvent e) {
+		// System.out.println("Mouse Click x,y " + e.getX() + "," + e.getY());
 		if (witnessUpperRightButton.isSelected()) {
 			test.setWitnessUpperRight(e.getPoint());
 			test.recalculateAllPoints();
@@ -552,8 +581,51 @@ public class TargetEvaluator extends JFrame {
 		this.fileName = fileName;
 	}
 
+	public void setPropertyResourceBundle(PropertyResourceBundle propertyResourceBundle) {
+		System.out.println("Setting Property Bundle");
+		this.propertyResourceBundle = propertyResourceBundle;
+		
+		witnessUpperLeftX = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_LEFT_X_KEY));
+		witnessUpperLeftY = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_LEFT_Y_KEY));
+		Point2D.Double witnessUpperLeft = new Point2D.Double(witnessUpperLeftX, witnessUpperLeftY);
+		test.setWitnessUpperLeft(witnessUpperLeft);System.out.println("Setting UL: " + Integer.toString(witnessUpperLeftX) + "," + Integer.toString(witnessUpperLeftY));
+		witnessUpperLeftLabel.setText(Integer.toString(witnessUpperLeftX) + "," + Integer.toString(witnessUpperLeftY));
+		
+		witnessUpperRightX = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_RIGHT_X_KEY));
+		witnessUpperRightY = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_RIGHT_Y_KEY));
+		Point2D.Double witnessUpperRight = new Point2D.Double(witnessUpperRightX, witnessUpperRightY);
+		test.setWitnessUpperRight(witnessUpperRight);
+		witnessUpperRightLabel.setText(Integer.toString(witnessUpperRightX) + "," + Integer.toString(witnessUpperRightY));
+		
+		witnessLowerLeftX = Integer.parseInt(propertyResourceBundle.getString(WITNESS_LOWER_LEFT_X_KEY));
+		witnessLowerLeftY = Integer.parseInt(propertyResourceBundle.getString(WITNESS_LOWER_LEFT_Y_KEY));
+		Point2D.Double witnessLowerLeft = new Point2D.Double(witnessLowerLeftX, witnessLowerLeftY);
+		
+		test.setWitnessLowerLeft(witnessLowerLeft);
+		witnessLowerLeftLabel.setText(Integer.toString(witnessLowerLeftX) + "," + Integer.toString(witnessLowerLeftY));
+		
+		
+		aimPointX = Integer.parseInt(propertyResourceBundle.getString(AIM_POINT_X_KEY));
+		aimPointY = Integer.parseInt(propertyResourceBundle.getString(AIM_POINT_Y_KEY));
+		Point2D.Double sightPoint = new Point2D.Double(aimPointX, aimPointY);
+		test.setSightPoint(sightPoint);
+		aimingPointLabel.setText(Integer.toString(aimPointX) + "," + Integer.toString(aimPointY));
+		
+		
+		witnessX = Double.parseDouble(propertyResourceBundle.getString(WITNESS_WIDTH_KEY));
+		test.setWitnessX(witnessX);
+		witnessWidth.setValue(witnessX);
+		
+		witnessY = Double.parseDouble(propertyResourceBundle.getString(WITNESS_HEIGHT_KEY));
+		test.setWitnessY(witnessY);
+		witnessHeight.setValue(witnessY);
+		
+		
+		
+	}
+
 	public void warn(String message) {
-		JOptionPane.showMessageDialog(null, message, "Error Massage", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, "Error Message", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static void main(String[] args) {
@@ -566,6 +638,17 @@ public class TargetEvaluator extends JFrame {
 			// This is where a real application would open the file.
 			// System.out.println("Opening: " + file.getAbsolutePath() + ".");
 			TargetEvaluator tEvaluator = new TargetEvaluator(file.getAbsolutePath());
+			if (args.length >= 1) {
+				String propertyFileName = args[0];
+				try (FileInputStream fis = new FileInputStream(propertyFileName)) {
+					PropertyResourceBundle resourceBundle = new PropertyResourceBundle(fis);
+					tEvaluator.setPropertyResourceBundle(resourceBundle);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			tEvaluator.setVisible(true);
 		} else {
 			System.out.println("Open command cancelled by user.");
