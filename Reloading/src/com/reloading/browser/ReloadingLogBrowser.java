@@ -210,7 +210,7 @@ public class ReloadingLogBrowser {
 		JMenuItem addFirearmItem = new JMenuItem(ADD_FIREARM);
 		firearmMenu.add(addFirearmItem);
 		addFirearmItem.addActionListener(adapter);
-		addFactoryLoadItem.setActionCommand(ADD_FIREARM);
+		addFirearmItem.setActionCommand(ADD_FIREARM);
 		
 		tabs = new JTabbedPane();
 		frame.add(tabs, BorderLayout.CENTER);

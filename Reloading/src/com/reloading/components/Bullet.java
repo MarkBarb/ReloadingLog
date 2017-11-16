@@ -31,7 +31,21 @@ public class Bullet extends Component implements Comparable<Bullet>{
 	public float getBallisticCoefficient() {
 		return ballisticCoefficient;
 	}
-	
+	/**
+	 * Returns the Ballistic Coefficient 
+	 * @return
+	 */
+	//public float getBallisticCoefficient() {
+	//	return ballisticCoefficient;
+	//}
+
+	/**
+	 * Returns a String representation of the Ballistic Coefficient 
+	 * @return
+	 */
+	//public String getBallisticCoefficient() {
+	//	return String.valueOf(ballisticCoefficient);
+	//}
 	/**
 	 * Returns a String representation of the Ballistic Coefficient 
 	 * @return
@@ -79,6 +93,14 @@ public class Bullet extends Component implements Comparable<Bullet>{
 	public String getWeightString() {
 		return String.valueOf(weight);
 	}
+
+	/**
+	 * Sets the ballistic coefficient 
+	 * @param ballisticCoefficient
+	 */
+	public void setBallisticCoefficient(float ballisticCoefficient) {
+		this.ballisticCoefficient = ballisticCoefficient;
+	}
 	
 	/**
 	 * Sets the ballistic coefficient 
@@ -88,13 +110,6 @@ public class Bullet extends Component implements Comparable<Bullet>{
 		this.ballisticCoefficient = Float.parseFloat(ballisticCoefficient);
 	}
 
-	/**
-	 * Sets the ballistic coefficient 
-	 * @param ballisticCoefficient
-	 */
-	public void setBallisticCoefficient(float ballisticCoefficient) {
-		this.ballisticCoefficient = ballisticCoefficient;
-	}
 
 
 	/**

@@ -105,7 +105,7 @@ public class ReloadsTab extends ReloadingLogTab {
 		if (primer != null) {
 			primerString = primer.getShortName();
 		}
-		Case nCase = load.getCase();
+		Case nCase = load.getCasing();
 		String caseString = "";
 		if (nCase != null) {
 			caseString = nCase.toString();
@@ -143,7 +143,7 @@ public class ReloadsTab extends ReloadingLogTab {
 					tableModel.setValueAt(powderString,row,3);
 					tableModel.setValueAt(load.getPowderMeasureSetting(),row,4);
 					tableModel.setValueAt(load.getPrimer().getShortName(),row,5);
-					tableModel.setValueAt(load.getCase().getShortName(),row,6);
+					tableModel.setValueAt(load.getCasing().getShortName(),row,6);
 					tableModel.setValueAt(load.getOverAllLength(),row,7);
 					tab.validate();
 				}

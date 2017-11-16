@@ -1,7 +1,7 @@
 <!--?xml version="1.0"?-->
 
 <hibernate-mapping package="hibernate.entity">
-    <class name="com.reloading.components.Powder" table="reloadingLog.Powders">
+    <class name="com.reloading.components.Powder" table="Powders">
         <id name="id" column="Id">
             <generator class="native"></generator>
 	</id>

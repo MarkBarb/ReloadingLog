@@ -12,7 +12,16 @@ public class CastBullet extends Bullet {
 	public CastBullet(int id) {
 		super(id);
 	}
-
+	
+	/**
+	 * Sets the ballistic coefficient 
+	 * @param ballisticCoefficient
+	 */
+	public void setBallisticCoefficient(float ballisticCoefficient) {
+		super.setBallisticCoefficient( ballisticCoefficient);
+		//this.ballisticCoefficient = ballisticCoefficient;
+	}
+	
 	public String getAlloy() {
 		return alloy;
 	}

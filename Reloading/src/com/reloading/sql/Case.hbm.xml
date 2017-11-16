@@ -1,7 +1,7 @@
 <!--?xml version="1.0"?-->
 
 <hibernate-mapping package="hibernate.entity">
-    <class name="com.reloading.components.Case" table="reloadingLog.Cases">
+    <class name="com.reloading.components.Case" table="Cases">
         <id name="id" column="Id">
             <generator class="native"></generator>
 	</id>

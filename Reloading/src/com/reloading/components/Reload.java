@@ -58,14 +58,14 @@ public class Reload extends Load {
 		return bullet.getId();
 	}
 
-	public int getCaseId() {
+	public int getCasingId() {
 		if (casing == null) {
 			return -1;
 		}
 		return casing.getId();
 	}
 
-	public Case getCase() {
+	public Case getCasing() {
 		return casing;
 	}
 
@@ -107,7 +107,7 @@ public class Reload extends Load {
 		this.bullet = bullet;
 	}
 	
-	public void setCase(Case casing) {
+	public void setCasing(Case casing) {
 		this.casing = casing;
 	}
 

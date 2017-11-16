@@ -1,7 +1,7 @@
 <!--?xml version="1.0"?-->
 
 <hibernate-mapping package="hibernate.entity">
-    <class name="com.reloading.components.Primer" table="reloadingLog.Primers">
+    <class name="com.reloading.components.Primer" table="Primers">
         <id name="id" column="Id">
             <generator class="native"></generator>
 	</id>

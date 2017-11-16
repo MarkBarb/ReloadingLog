@@ -98,7 +98,7 @@ public class ReloadsDialog {
 			ArrayList<Case> caseList = factory.getCases();
 			Object cases[] =  caseList.toArray();
 			JComboBox caseChooser = new JComboBox(cases);
-			int caseId = reload.getCaseId();
+			int caseId = reload.getCasingId();
 			if (caseId > 0){
 				for (int idx=0;idx<caseList.size();idx++){
 					if (caseList.get(idx).getId() == caseId){
@@ -142,7 +142,7 @@ public class ReloadsDialog {
 				reload.setPrimer(primer);
 				
 				Case casing = (Case) caseChooser.getSelectedItem();
-				reload.setCase(casing);
+				reload.setCasing(casing);
 				
 				reload.setComments(comments.getText());
 				reload.setOverAllLength(Float.parseFloat(overAllLength.getText()));

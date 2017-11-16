@@ -38,25 +38,25 @@ public class SqlFactory extends Factory {
 	protected static final String HIBERNATE_CFG_KEY = "HIBERNATE_CFG_FILE";
 	protected static String hibernateCfg = "";
 
+	protected static final String BULLETFILE_KEY = "BULLETFILE";
 	protected static final String CASTBULLETFILE_KEY = "CASTBULLETFILE";
 	protected static final String FACTORYBULLETFILE_KEY = "FACTORYBULLETFILE";
 	protected static final String CARTRIDGEFILE_KEY = "CARTRIDGEFILE";
 	protected static final String CASEFILE_KEY = "CASEFILE";
 	protected static final String POWDERFILE_KEY = "POWDERFILE";
 	protected static final String PRIMERFILE_KEY = "PRIMERFILE";
-	protected static final String FACTORYLOADFILE_KEY = "FACTORYLOADFILE";
-	protected static final String RELOADFILE_KEY = "RELOADLOADFILE";
+	protected static final String LOADFILE_KEY = "LOADFILE";
+	protected static final String FIREARMSFILE_KEY = "FIREARMFILE";
 
 	protected static final String CARTRIDGE_MAP_KEY = "CARTRIDGE_MAP";
 
-	private String castBulletsFileName = "";
-	private String factoryBulletsFileName = "";
+	private String bulletsFileName = "";
 	private String cartridgesFileName = "";
 	private String casesFileName = "";
 	private String powdersFileName = "";
 	private String primersFileName = "";
-	private String factoryloadsFileName = "";
-	private String reloadsFileName = "";
+	private String loadsFileName = "";
+	private String firearmsFileName = "";
 
 	public SqlFactory() {
 		// TODO Auto-generated constructor stub
@@ -78,26 +78,25 @@ public class SqlFactory extends Factory {
 		hibernateCfg = propertyResourceBundle.getString(HIBERNATE_CFG_KEY);
 		System.out.println("\n\n" + hibernateCfg + "\n\n");
 		// get the mapping file names
-		castBulletsFileName = propertyResourceBundle.getString(CASTBULLETFILE_KEY);
-		factoryBulletsFileName = propertyResourceBundle.getString(FACTORYBULLETFILE_KEY);
+		bulletsFileName = propertyResourceBundle.getString(BULLETFILE_KEY);
 		cartridgesFileName = propertyResourceBundle.getString(CARTRIDGEFILE_KEY);
 		casesFileName = propertyResourceBundle.getString(CASEFILE_KEY);
 		powdersFileName = propertyResourceBundle.getString(POWDERFILE_KEY);
 		primersFileName = propertyResourceBundle.getString(PRIMERFILE_KEY);
-		factoryloadsFileName = propertyResourceBundle.getString(FACTORYLOADFILE_KEY);
-		reloadsFileName = propertyResourceBundle.getString(RELOADFILE_KEY);
-
+		loadsFileName = propertyResourceBundle.getString(LOADFILE_KEY);
+		firearmsFileName = propertyResourceBundle.getString(FIREARMSFILE_KEY);
+		
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure(hibernateCfg);
-			configuration.addResource(castBulletsFileName);
-			configuration.addResource(factoryBulletsFileName);
 			configuration.addResource(cartridgesFileName);
 			configuration.addResource(casesFileName);
-			configuration.addResource(powdersFileName);
+			configuration.addResource(bulletsFileName);
 			configuration.addResource(primersFileName);
-			configuration.addResource(factoryloadsFileName);
-			configuration.addResource(reloadsFileName);
+			configuration.addResource(powdersFileName);
+			configuration.addResource(loadsFileName);
+			configuration.addResource(firearmsFileName);
+			
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
@@ -152,13 +151,14 @@ public class SqlFactory extends Factory {
 		String className = bullet.getClass().getName();
 		System.out.println(className);
 		switch (className) {
-		case Constants.BULLET_CLASSNAME:
-			saveFactoryBullet(bullet);
-			break;
 
 		case Constants.CASTBULLET_CLASSNAME:
 			CastBullet castBullet = (CastBullet) bullet;
 			saveCastBullet(castBullet);
+			break;
+
+		default:
+			saveFactoryBullet(bullet);
 			break;
 		}
 	}
@@ -176,10 +176,10 @@ public class SqlFactory extends Factory {
 				session.save(bullet);
 				System.out.println("Save: " + bullet.getId());
 				int bulletId = bullet.getId();
-				Query query = session
-						.createSQLQuery("update reloadinglog.bullets set Cast = 1" + " where ID = :bulletId");
-				query.setParameter("bulletId", bulletId);
-				int result = query.executeUpdate();
+				//Query query = session
+				//		.createSQLQuery("update Bullets set Cast = 1" + " where ID = :bulletId");
+				//query.setParameter("bulletId", bulletId);
+				//int result = query.executeUpdate();
 			}
 			transaction.commit();
 
@@ -422,19 +422,19 @@ public class SqlFactory extends Factory {
 			Transaction transaction = session.getTransaction();
 			FactoryLoad tempLoad = new FactoryLoad();
 			transaction.begin();
-			tempLoad.setId(load.getId());
-			tempLoad.setCartridge(load.getCartridge());
-			tempLoad.setComments(load.getComments());
-			tempLoad.setManufacturer(load.getManufacturer());
-			tempLoad.setName(load.getName());
-			tempLoad.setShortName(load.getShortName());
+			//tempLoad.setId(load.getId());
+			//tempLoad.setCartridge(load.getCartridge());
+			//tempLoad.setComments(load.getComments());
+			//tempLoad.setManufacturer(load.getManufacturer());
+			//tempLoad.setName(load.getName());
+			//tempLoad.setShortName(load.getShortName());
 			if (loadID > 0) {
-				session.update(tempLoad);
+				session.update(load);
 			} else {
-				session.save(tempLoad);
-				loadID = tempLoad.getId();
+				session.save(load);
+				loadID = load.getId();
 				System.out.println("loadID: " + loadID);
-				load.setId(loadID);
+				//load.setId(loadID);
 				session.refresh(load);
 			}
 
@@ -455,15 +455,15 @@ public class SqlFactory extends Factory {
 				session.close();
 			}
 		}
-		switch (className) {
-		case Constants.FACTORYLOAD_CLASSNAME:
-			break;
-		case Constants.RELOAD_CLASSNAME:
-			Reload reload = (Reload) load;
-			saveReload(reload);
-			break;
-		default:
-		}
+		//switch (className) {
+		//case Constants.FACTORYLOAD_CLASSNAME:
+		//	break;
+		//case Constants.RELOAD_CLASSNAME:
+		//	Reload reload = (Reload) load;
+		//	saveReload(reload);
+		//	break;
+		//default:
+		//}
 	}
 
 	private void saveFactoryLoad(Load load) throws ReloadingException {
@@ -505,7 +505,7 @@ public class SqlFactory extends Factory {
 		String manufacturer = load.getManufacturer();
 		int bulletId = load.getBulletId();
 		int cartridgeId = load.getCartridgeId();
-		int caseId = load.getCaseId();
+		int caseId = load.getCasingId();
 		float powderCharge = load.getPowderCharge();
 		int powderId = load.getPowderId();
 		String powderMeasureSetting = load.getPowderMeasureSetting();
@@ -724,6 +724,65 @@ public class SqlFactory extends Factory {
 
 	}
 
+	@Override
+	public Firearm getFirearmByID(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Firearm> getFirearms() {
+		ArrayList<Firearm> firearms = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			List<Firearm> list = (List<Firearm>) session.createQuery("from Firearm").list();
+			firearms = new ArrayList<Firearm>(list);
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return firearms;
+	}
+
+	@Override
+	public void saveFirearm(Firearm firearm) throws ReloadingException {
+		// TODO Auto-generated method stub
+		int firearmID = firearm.getId();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			Transaction transaction = session.getTransaction();
+			transaction.begin();
+			if (firearmID > 0) {
+				session.update(firearm);
+			} else {
+				session.save(firearm);
+			}
+			transaction.commit();
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+			if (session.getTransaction().isActive()) {
+				session.getTransaction().rollback();
+			}
+			ReloadingException rException = new ReloadingException();
+			rException.setStackTrace(e.getStackTrace());
+			throw rException;
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		
+	}
+
 	/******************************************************************/
 	/* Hibernate stuff */
 	/******************************************************************/
@@ -731,7 +790,7 @@ public class SqlFactory extends Factory {
 	public static void main(String args[]) {
 		System.out.println("Configuration File: " + args[0]);
 		SqlFactory factory = new SqlFactory(args[0]);
-
+		//factory.run();
 		System.out.println("\n*********************************************");
 		System.out.println("            Cartridges");
 		System.out.println("*********************************************\n");
@@ -761,6 +820,26 @@ public class SqlFactory extends Factory {
 		}
 
 		System.out.println("\n*********************************************");
+		System.out.println("            Powders");
+		System.out.println("*********************************************\n");
+		ArrayList<Powder> powders = factory.getPowders();
+		for (int idx = 0; idx < powders.size(); idx++) {
+			Powder powder = powders.get(idx);
+			System.out.println(
+					powder.getClass().toString() + " " + powder.getShortName() + "  " + powder.getManufacturer());
+		}
+
+		System.out.println("\n*********************************************");
+		System.out.println("            Primers");
+		System.out.println("*********************************************\n");
+		ArrayList<Primer> primers = factory.getPrimers();
+		for (int idx = 0; idx < primers.size(); idx++) {
+			Primer primer = primers.get(idx);
+			System.out.println(
+					primer.getClass().toString() + " " + primer.getShortName() + "  " + primer.getManufacturer());
+		}
+
+		System.out.println("\n*********************************************");
 		System.out.println("            Loads");
 		System.out.println("*********************************************\n");
 		ArrayList<Load> loads = factory.getLoads();
@@ -769,6 +848,16 @@ public class SqlFactory extends Factory {
 			System.out.println(load.getManufacturer());
 			System.out.println(load.getClass().toString());
 			System.out.println(load.getCartridge().getShortName());
+		}
+
+		System.out.println("\n*********************************************");
+		System.out.println("            Firearms");
+		System.out.println("*********************************************\n");
+		ArrayList<Firearm> firearms = factory.getFirearms();
+		for (int idx = 0; idx < firearms.size(); idx++) {
+			Firearm firearm = firearms.get(idx);
+			System.out.println(firearm.getClass().toString() + " " + firearm.getModel());
+		
 		}
 	}
 
@@ -786,24 +875,6 @@ public class SqlFactory extends Factory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public Firearm getFirearmByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList<Firearm> getFirearms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void saveFirearm(Firearm firearm) throws ReloadingException {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

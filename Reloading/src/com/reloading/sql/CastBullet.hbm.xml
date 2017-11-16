@@ -1,7 +1,7 @@
 <!--?xml version="1.0"?-->
 
 <hibernate-mapping package="hibernate.entity">
-    <class name="com.reloading.components.CastBullet" table="reloadingLog.CastBullets">
+    <class name="com.reloading.components.CastBullet" table="Bullets">
         <id name="id" column="Id">
             <generator class="native"></generator>
 	</id>
@@ -9,13 +9,13 @@
         <property name="name" column="Name"></property>
         <property name="manufacturer" column="Manufacturer"></property>
 
-<property name="gasCheck" column="GasCheck"></property>
-<property name="diameter" column="Diameter"></property>
-<property name="asCastDiameter" column="AsCastDiameter"></property>
-<property name="weight" column="Weight"></property>
+<property name="GasCheck" column="GasCheck"></property>
+<property name="Diameter" column="Diameter"></property>
+<property name="AsCastDiameter" column="AsCastDiameter"></property>
+<property name="Weight" column="Weight"></property>
 <property name="ballisticCoeffient" column="BallisticCoefficient"></property>
-<property name="style" column="Style"></property>
-<property name="lube" column="Lube"></property>
-<property name="alloy" column="Alloy"></property>
+<property name="Style" column="Style"></property>
+<property name="Lube" column="Lube"></property>
+<property name="Alloy" column="Alloy"></property>
     </class>
 </hibernate-mapping>

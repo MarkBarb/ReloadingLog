@@ -1,7 +1,7 @@
 <!--?xml version="1.0"?-->
 
 <hibernate-mapping package="hibernate.entity">
-    <class name="com.reloading.components.Cartridge" table="reloadingLog.Cartridges">
+    <class name="com.reloading.components.Cartridge" table="Cartridges">
         <id name="id" column="Id">
             <generator class="native"></generator>
 	</id>
