@@ -43,7 +43,7 @@ public class Constants {
 
 	//Cases node names and attributes
 	public static final String CASES = "Cases";
-	public static final String CASE = "Case";
+	public static final String CASE = "Casing";
 	public static final String[] CASE_ATTRIBUTES = {
 			"CartridgeId"
 	};
@@ -114,6 +114,17 @@ public class Constants {
 	};
 	
 	public static final String[] RELOAD_COLUMNS= {
+			"Cartridge"
+			,"Bullet"
+			,"Powder"
+			,"PowderMeasureSetting"
+			,"Primer"
+			,"Case"
+			,"OverAllLength"
+			,"Comment"
+			
+	};
+	public static final String[] RELOAD_COLUMNS_old= {
 			"Reload"
 			,"Cartridge"
 			,"Bullet"

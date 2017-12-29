@@ -54,6 +54,8 @@ import com.reloading.components.Primer;
 import com.reloading.components.Reload;
 import com.reloading.exceptions.ReloadingException;
 import com.reloading.factory.Factory;
+import com.reloading.target.TargetEvaluatorTest;
+import com.reloading.testing.Test;
 
 public class XmlFactory extends Factory {
 
@@ -786,6 +788,21 @@ public class XmlFactory extends Factory {
 				,Constants.PRIMER_ATTRIBUTES );
 	}	
 	
+	/****************************************************************/
+	/*                                                              */
+	/****************************************************************/
+	
+	public Test getTestByID(int id){
+		Test test = new TargetEvaluatorTest();
+		return test;
+	}
+	public ArrayList<Test> getTests(){
+		ArrayList<Test> tests=  new ArrayList<Test>();
+		return tests;
+	}
+	public void saveTest(Test test) throws ReloadingException{
+		return;
+	}
 	
 	/*****************************************************************/
 	/* main */

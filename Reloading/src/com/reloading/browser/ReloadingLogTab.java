@@ -35,7 +35,7 @@ public abstract class ReloadingLogTab extends JPanel {
 	}
 
 	private void buildScrollPane(){
-		System.out.println("building ScrollPane");
+		//System.out.println("building ScrollPane");
 		scrollPane = new JScrollPane();
 		scrollPane.setLayout(new ScrollPaneLayout());
 		this.add(scrollPane,BorderLayout.CENTER);

@@ -342,8 +342,8 @@ public class TargetEvaluator extends JFrame {
 				}
 				String text = evt.getNewValue() != null ? evt.getNewValue().toString() : "";
 				witnessWidth.setValue(evt.getNewValue());
-				witnessY = width;
-				test.setWitnessY(width);
+				witnessX = width;
+				test.setWitnessX(width);
 				test.recalculateAllPoints();
 				refreshData();
 
@@ -416,6 +416,7 @@ public class TargetEvaluator extends JFrame {
 		// Third ROW
 
 		witnessLowerLeftButton = new JRadioButton(LOWER_LEFT_WITNESS);
+		buttonGroup.add(witnessLowerLeftButton);
 		buttonPanel.add(witnessLowerLeftButton);
 
 		witnessLowerLeftLabel = new JLabel(
@@ -478,9 +479,10 @@ public class TargetEvaluator extends JFrame {
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				// all cells false
+				if(column == 3) return true;
 				return false;
 			}
+			
 		};
 
 		shotTable = new JTable(shotTableModel);

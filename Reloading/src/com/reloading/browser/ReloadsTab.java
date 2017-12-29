@@ -111,7 +111,9 @@ public class ReloadsTab extends ReloadingLogTab {
 			caseString = nCase.toString();
 		}
 		String overAllLenthString = Float.toString(load.getOverAllLength());
-		Object[] row = { load, cartridgeString, bulletString, powderString, powderMeasureSetting,primerString, caseString,overAllLenthString };
+		String comment = load.getComments();
+		if (comment.length() > 25) comment = comment.substring(0, 25);
+		Object[] row = { cartridgeString, bulletString, powderString, powderMeasureSetting,primerString, caseString,overAllLenthString,comment };
 		tableModel.addRow(row);
 		tab.validate();
 

@@ -30,6 +30,10 @@ import com.reloading.components.Primer;
 import com.reloading.components.Reload;
 import com.reloading.exceptions.ReloadingException;
 import com.reloading.factory.Factory;
+import com.reloading.target.TargetEvaluatorShot;
+import com.reloading.target.TargetEvaluatorTest;
+import com.reloading.testing.Shot;
+import com.reloading.testing.Test;
 
 public class SqlFactory extends Factory {
 	private static final Logger LOGGER = Logger.getLogger("Sql Factory");
@@ -39,14 +43,15 @@ public class SqlFactory extends Factory {
 	protected static String hibernateCfg = "";
 
 	protected static final String BULLETFILE_KEY = "BULLETFILE";
-	protected static final String CASTBULLETFILE_KEY = "CASTBULLETFILE";
-	protected static final String FACTORYBULLETFILE_KEY = "FACTORYBULLETFILE";
 	protected static final String CARTRIDGEFILE_KEY = "CARTRIDGEFILE";
 	protected static final String CASEFILE_KEY = "CASEFILE";
+	protected static final String FIREARMSFILE_KEY = "FIREARMFILE";
+	protected static final String LOADFILE_KEY = "LOADFILE";
 	protected static final String POWDERFILE_KEY = "POWDERFILE";
 	protected static final String PRIMERFILE_KEY = "PRIMERFILE";
-	protected static final String LOADFILE_KEY = "LOADFILE";
-	protected static final String FIREARMSFILE_KEY = "FIREARMFILE";
+	protected static final String TARGETTESTFILE_KEY = "TARGETTESTFILE";
+	protected static final String TARGETTESTSHOTFILE_KEY = "TARGETTESTSHOTFILE";
+	
 
 	protected static final String CARTRIDGE_MAP_KEY = "CARTRIDGE_MAP";
 
@@ -57,6 +62,9 @@ public class SqlFactory extends Factory {
 	private String primersFileName = "";
 	private String loadsFileName = "";
 	private String firearmsFileName = "";
+	private String targetTestFileName = "";
+	private String targetTestShotFileName = "";
+	
 
 	public SqlFactory() {
 		// TODO Auto-generated constructor stub
@@ -85,6 +93,8 @@ public class SqlFactory extends Factory {
 		primersFileName = propertyResourceBundle.getString(PRIMERFILE_KEY);
 		loadsFileName = propertyResourceBundle.getString(LOADFILE_KEY);
 		firearmsFileName = propertyResourceBundle.getString(FIREARMSFILE_KEY);
+		targetTestFileName  = propertyResourceBundle.getString(TARGETTESTFILE_KEY);
+		targetTestShotFileName = propertyResourceBundle.getString(TARGETTESTSHOTFILE_KEY);
 		
 		try {
 			Configuration configuration = new Configuration();
@@ -96,6 +106,8 @@ public class SqlFactory extends Factory {
 			configuration.addResource(powdersFileName);
 			configuration.addResource(loadsFileName);
 			configuration.addResource(firearmsFileName);
+			configuration.addResource(targetTestFileName);
+			configuration.addResource(targetTestShotFileName);
 			
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();
@@ -783,6 +795,129 @@ public class SqlFactory extends Factory {
 		
 	}
 
+	
+	/****************************************************************/
+	/*                                                              */
+	/****************************************************************/
+	
+	public Test getTestByID(int id){
+		Test test = new TargetEvaluatorTest();
+		return test;
+	}
+	public ArrayList<Test> getTests(){
+		ArrayList<Test> tests=  new ArrayList<Test>();Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			List<Test> list = (List<Test>) session.createQuery("from TargetEvaluatorTest").list();
+			tests = new ArrayList<Test>(list);
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return tests;
+	}
+	
+	public void saveTest(Test test) throws ReloadingException{
+		int testId = test.getId();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			Transaction transaction = session.getTransaction();
+			transaction.begin();
+			if (testId > 0) {
+				session.update(test);
+			} else {
+				session.save(test);
+			}
+			
+			if (test instanceof TargetEvaluatorTest){
+				TargetEvaluatorTest tETest = (TargetEvaluatorTest) test;
+				ArrayList<Shot> shots = tETest.getShotsList();
+				for (int sIdx=0;sIdx < shots.size();sIdx++){
+					TargetEvaluatorShot shot = (TargetEvaluatorShot)shots.get(sIdx);
+					saveShot(session,shot);
+				}
+			}
+			transaction.commit();
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+			if (session.getTransaction().isActive()) {
+				session.getTransaction().rollback();
+			}
+			ReloadingException rException = new ReloadingException();
+			rException.setStackTrace(e.getStackTrace());
+			throw rException;
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return;
+	}
+
+	
+	/****************************************************************/
+	/*                                                              */
+	/****************************************************************/
+	
+	public Shot getShotByID(int id){
+		Shot shot = new TargetEvaluatorShot();
+		return shot;
+	}
+	/*
+	public ArrayList<Shot> getShots(){
+		ArrayList<Shot> shots=  new ArrayList<Shot>();Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			List<Shot> list = (List<Shot>) session.createQuery("from TargetEvaluatorShot").list();
+			shots = new ArrayList<Shot>(list);
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return shots;
+	}
+	*/
+	
+	public void saveShot(Session session, Shot shot) throws ReloadingException{
+		int shotId = shot.getId();
+		//Session session = null;
+		try {
+			//session = sessionFactory.openSession();
+			//Transaction transaction = session.getTransaction();
+			//transaction.begin();
+			if (shotId > 0) {
+				session.update(shot);
+			} else {
+				session.save(shot);
+			}
+			//transaction.commit();
+
+		} catch (Exception e) {
+			LOGGER.log(Level.FATAL, e.getMessage(), e);
+			if (session.getTransaction().isActive()) {
+				session.getTransaction().rollback();
+			}
+			ReloadingException rException = new ReloadingException();
+			rException.setStackTrace(e.getStackTrace());
+			throw rException;
+
+		} 
+		return;
+	}
+	
 	/******************************************************************/
 	/* Hibernate stuff */
 	/******************************************************************/
@@ -858,6 +993,47 @@ public class SqlFactory extends Factory {
 			Firearm firearm = firearms.get(idx);
 			System.out.println(firearm.getClass().toString() + " " + firearm.getModel());
 		
+		}
+		System.out.println("\n*********************************************");
+		System.out.println("            Tests");
+		System.out.println("*********************************************\n");
+		ArrayList<Test> tests = factory.getTests();
+		for (int idx = 0; idx < tests.size(); idx++) {
+			TargetEvaluatorTest test = (TargetEvaluatorTest) tests.get(idx);
+			System.out.println("\nGroup Size: " + Double.toString(test.getGroupSize()));
+			System.out.println("Average Velocity: " + Double.toString(test.getAverageVelocity()));
+			ArrayList<Shot> shots =  test.getShotsList();
+			Collections.sort(shots);
+			for (int sIdx = 0; sIdx < shots.size();sIdx++){
+				TargetEvaluatorShot shot = (TargetEvaluatorShot) shots.get(sIdx);
+				System.out.println("\tShot: " + Integer.toString(shot.getShotNumber()) 
+				+ " Velocity: " + Double.toString(shot.getVelocity()) 
+				+ " Windage: " + Double.toString(shot.getWindage())
+				+ " RawWindage: " + Double.toString(shot.getRawWindage())
+				+ " Elevation: " + Double.toString(shot.getElevation())
+				+ " RawElevation: " + Double.toString(shot.getRawElevation()));
+			}
+			test.recalculateAllPoints();
+			System.out.println("\nGroup Size: " + Double.toString(test.getGroupSize()));
+			System.out.println("Average Velocity: " + Double.toString(test.getAverageVelocity()));
+			shots =  test.getShotsList();
+			Collections.sort(shots);
+			for (int sIdx = 0; sIdx < shots.size();sIdx++){
+				TargetEvaluatorShot shot = (TargetEvaluatorShot) shots.get(sIdx);
+				System.out.println("\tShot: " + Integer.toString(shot.getShotNumber()) 
+				+ " Velocity: " + Double.toString(shot.getVelocity()) 
+				+ " Windage: " + Double.toString(shot.getWindage())
+				+ " RawWindage: " + Double.toString(shot.getRawWindage())
+				+ " Elevation: " + Double.toString(shot.getElevation())
+				+ " RawElevation: " + Double.toString(shot.getRawElevation()));
+			}
+			try{
+				factory.saveTest(test);
+			}
+			catch(ReloadingException ex){
+				ex.printStackTrace();
+			}
+			
 		}
 	}
 

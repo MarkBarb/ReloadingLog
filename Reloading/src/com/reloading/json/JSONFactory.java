@@ -34,6 +34,8 @@ import com.reloading.components.Primer;
 import com.reloading.exceptions.ReloadingException;
 import com.reloading.factory.Factory;
 import com.reloading.sql.SqlFactory;
+import com.reloading.target.TargetEvaluatorTest;
+import com.reloading.testing.Test;
 
 public class JSONFactory extends Factory {
 	protected static final String BULLETFILE_KEY = "BULLETFILE";
@@ -624,6 +626,22 @@ public class JSONFactory extends Factory {
 
 	}
 
+	/****************************************************************/
+	/*                                                              */
+	/****************************************************************/
+	
+	public Test getTestByID(int id){
+		Test test = new TargetEvaluatorTest();
+		return test;
+	}
+	public ArrayList<Test> getTests(){
+		ArrayList<Test> tests=  new ArrayList<Test>();
+		return tests;
+	}
+	public void saveTest(Test test) throws ReloadingException{
+		return;
+	}
+	
 	public static void main(String args[]) {
 		System.out.println("Configuration File: " + args[0]);
 		JSONFactory factory = new JSONFactory(args[0]);

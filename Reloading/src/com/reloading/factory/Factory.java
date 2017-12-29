@@ -10,9 +10,7 @@ import java.util.PropertyResourceBundle;
 import com.reloading.exceptions.*;
 //import org.apache.log4j.Level;
 //import org.apache.log4j.Logger;
-
-
-
+import com.reloading.testing.Test;
 import com.reloading.components.*;
 
 
@@ -116,4 +114,12 @@ public abstract class Factory {
 	public abstract Primer getPrimerByID(int id);
 	public abstract ArrayList<Primer> getPrimers();
 	public abstract void savePrimer(Primer primer) throws ReloadingException;
+	
+	/****************************************************************/
+	/*                                                              */
+	/****************************************************************/
+	
+	public abstract Test getTestByID(int id);
+	public abstract ArrayList<Test> getTests();
+	public abstract void saveTest(Test test) throws ReloadingException;
 }

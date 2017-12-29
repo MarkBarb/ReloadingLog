@@ -2,7 +2,9 @@ package com.reloading.components;
 
 import java.util.ArrayList;
 
-public class Firearm extends Component {
+import com.reloading.testing.Test;
+
+public class Firearm extends Component implements Comparable<Firearm>{
 	private String model = "";
 	private String serial = "";
 	
@@ -77,6 +79,26 @@ public class Firearm extends Component {
 		String str = manufacturer.substring(0, 2) + model;
 		return str;
 	}
-	
+
+	@Override
+    public int compareTo(Firearm firearm) {
+		int rtnVal = 0;
+		//compare the manufacturer
+		String compareString = firearm.getManufacturer();
+		rtnVal = manufacturer.compareToIgnoreCase(compareString);
+		if (rtnVal != 0) return rtnVal;
+		
+		//compare the model
+		compareString = firearm.getModel();
+		rtnVal = model.compareToIgnoreCase(compareString);
+		if (rtnVal != 0) return rtnVal;
+		
+		//compare serial numbers
+		compareString = firearm.getSerial();
+		rtnVal = serial.compareToIgnoreCase(compareString);
+		if (rtnVal != 0) return rtnVal;
+		
+		return rtnVal;
+    }
 	
 }

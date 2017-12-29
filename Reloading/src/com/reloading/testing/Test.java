@@ -2,12 +2,14 @@ package com.reloading.testing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.reloading.components.Firearm;
 import com.reloading.components.Load;
 import com.reloading.components.Reload;
 
-public class Test {
+public class Test implements Comparable<Test>{
 	
 	private Firearm firearm;
 	private int id = 0;
@@ -36,6 +38,13 @@ public class Test {
 		shots.add(index, shot);
 	}
 	
+	public Set<Shot> getShotSet(){
+		return new HashSet<Shot>(shots);
+	}
+	
+	public void setShotSet(Set<Shot> shots){
+		this.shots = new ArrayList<Shot>(shots);
+	}
 	
 	public Firearm getFirearm() {
 		return firearm;
@@ -60,6 +69,10 @@ public class Test {
 	public ArrayList<Shot> getShotsList() {
 		return shots;
 	}
+	
+	public ArrayList<Shot> getShots() {
+		return shots;
+	}
 
 	public void setFirearm(Firearm firearm) {
 		this.firearm = firearm;
@@ -77,9 +90,27 @@ public class Test {
 		this.shots = shots;
 	}
 
+	public void setShots(ArrayList<Shot> shots) {
+		this.shots = shots;
+	}
 	
 	
 
+	@Override
+    public int compareTo(Test test) {
+		int rtnVal = 0;
+		//compare the load
+		Load compareLoad = test.getLoad();
+		rtnVal = this.load.compareTo(compareLoad);
+		if (rtnVal != 0) return rtnVal;
+		
+		//compare the firearm
+		Firearm compareFirearm = test.getFirearm();
+		rtnVal = firearm.compareTo(compareFirearm);
+		if (rtnVal != 0) return rtnVal;
+		
+		return rtnVal;
+    }
 
 	
 	
