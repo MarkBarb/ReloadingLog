@@ -1,0 +1,31 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+    <class name="com.reloading.components.Bullet" table="Bullets" abstract="true" discriminator-value="-1">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+	    </id>
+	    
+	    <discriminator column="CastBullet" type="integer"/>  
+	    
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+		<property name="diameter" column="Diameter" type="float" ></property>
+	
+		<property name="weight" column="Weight" type="float" ></property>
+		<property name="BallisticCoefficient" column="BallisticCoefficient" type="float" ></property>
+		
+	    
+    	<subclass name="com.reloading.components.JacketedBullet" discriminator-value="0">
+    	</subclass>
+    	
+    	<subclass name="com.reloading.components.CastBullet" discriminator-value="1">
+			<property name="asCastDiameter" column="AsCastDiameter" type="float" ></property>
+			<property name="lube" column="Lube"></property>
+			<property name="alloy" column="Alloy"></property>
+			<property name="gasChecked" column="GasCheck"></property>
+    	</subclass>
+    
+    </class>
+</hibernate-mapping>

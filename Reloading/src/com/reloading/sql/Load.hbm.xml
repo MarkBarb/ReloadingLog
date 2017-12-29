@@ -1,0 +1,35 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+    <class name="com.reloading.components.Load" table="Loads">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+		</id>
+	
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+        <property name="comments" column="Comments"></property>
+		<many-to-one name="cartridge" column="CartridgeId"  class="com.reloading.components.Cartridge" not-null="true" lazy="false"/>
+
+	
+  <joined-subclass name="com.reloading.components.FactoryLoad" table="FactoryLoads">  
+  	<key column="Id"></key>  
+  	<property name="lotNumber" column="LotNumber" ></property>  
+  </joined-subclass>  
+  
+  <joined-subclass name="com.reloading.components.Reload" table="Reloads"> 
+  	<key column="Id"></key>   
+  	<property name="powderCharge" column="PowderCharge" type="float" ></property>  
+  	<property name="overAllLength" column="OverallLength" type="float" ></property>  
+  	<property name="powderMeasureSetting" column="PowderMeasureSetting"  ></property>  
+  	
+  	
+	<many-to-one name="bullet" column="BulletId" class="com.reloading.components.Bullet" not-null="false" lazy="false"/>
+	<many-to-one name="casing" column="CaseId" class="com.reloading.components.Case" not-null="true" lazy="false" />
+	<many-to-one name="powder" column="PowderId" class="com.reloading.components.Powder" not-null="true" lazy="false" />
+	<many-to-one name="primer" column="PrimerId" class="com.reloading.components.Primer" not-null="true" lazy="false"/>
+  </joined-subclass>  
+
+    </class>
+</hibernate-mapping>

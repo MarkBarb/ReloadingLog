@@ -1,0 +1,27 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+	<class name="com.reloading.target.TargetEvaluatorShot" table="TargetEvaluatorShots">
+		<id name="id" column="Id">
+			<generator class="native"/>
+		</id>
+		<!-- Properties from BenchShot -->
+		<property name="shotNumber" column="ShotNumber"/>
+		<property name="validImpact" column="ValidImpact" type="boolean" />
+		<property name="velocity" column="Velocity"/>
+		<property name="windage" column="Windage"/>
+		<property name="elevation" column="Elevation"/>
+
+
+		<!-- Properties specific to  TargetEvaluatorShot -->
+		<property name="rawWindage" column="RawWindage"/>
+		<property name="rawElevation" column="RawElevation"/>
+
+		<many-to-one name="Test" class="com.reloading.target.TargetEvaluatorTest" fetch="select">
+			<column name="TestId" not-null="true" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>
+
+

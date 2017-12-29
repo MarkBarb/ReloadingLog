@@ -1,0 +1,15 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+    <class name="com.reloading.components.Firearm" table="Firearms">
+        <id name="id" column="Id">
+            <generator class="native"></generator>
+	</id>
+        <property name="shortName" column="ShortName"></property>
+        <property name="name" column="Name"></property>
+        <property name="manufacturer" column="Manufacturer"></property>
+        <property name="model" column="Model"></property>
+        <property name="serial" column="Serial"></property>
+	
+    </class>
+</hibernate-mapping>

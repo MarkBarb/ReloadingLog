@@ -1,0 +1,39 @@
+<!--?xml version="1.0"?-->
+
+<hibernate-mapping package="hibernate.entity">
+	<class name="com.reloading.target.TargetEvaluatorTest" table="TargetEvaluatorTests">
+		<id name="id" column="Id">
+			<generator class="native"/>
+		</id>
+		<!-- Properties from Test -->
+
+		<many-to-one name="firearm" column="FirearmId" class="com.reloading.components.Firearm" not-null="false" lazy="false"/>
+		<many-to-one name="load" column="LoadId" class="com.reloading.components.Load" not-null="false" lazy="false"/>
+
+		<!-- Properties specific to  TargetEvaluatorTest -->
+		<property name="sightPointX" column="[SightPointX]"/>
+		<property name="sightPointY" column="[SightPointY]"/>
+
+		<property name="witnessUpperLeftX" column="WitnessUpperLeftX"/>
+		<property name="witnessUpperLeftY" column="WitnessUpperLeftY"/>
+
+		<property name="witnessUpperRightX" column="WitnessUpperRightX"/>
+		<property name="witnessUpperRightY" column="WitnessUpperRightY"/>
+
+		<property name="witnessLowerLeftX" column="WitnessLowerLeftX"/>
+		<property name="witnessLowerLeftY" column="WitnessLowerLeftY"/>
+
+		<property name="scannedTarget" column="TargetFileName"/>
+
+
+        <set name="shotSet" table="TargetEvaluatorShots"  inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TestId" not-null="true" />
+            </key>
+            <one-to-many class="com.reloading.target.TargetEvaluatorShot" />
+        </set>
+
+	</class>
+</hibernate-mapping>
+
+
