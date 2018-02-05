@@ -547,7 +547,7 @@ public class TargetEvaluator extends JFrame {
 			groupSize.setText("GroupSize: " + df2.format(test.getGroupSize()));
 			Point2D center = test.getGroupCenter();
 			groupCenter.setText("GroupCenter: " + df2.format(center.getX()) + "," + df2.format(center.getY()));
-			stdGroup.setText("xSD: " + df2.format(test.getWindageSD()) + "  ySD: " + df2.format(test.getElevationSD()));
+			stdGroup.setText("windSD: " + df2.format(test.getWindageSD()) + "  eleSD: " + df2.format(test.getElevationSD()));
 			if (test.getAverageVelocity() > 0) {
 				aveVelocity.setText("Ave Velocity: " + df0.format(test.getAverageVelocity()));
 				stdVelocity.setText("Std Velocity: " + df2.format(test.getVelocitySD()));

@@ -44,7 +44,8 @@ public class BenchTest extends Test{
 		double sd = 0.0;
 		double diffSum = 0;
 		double n = 0.0;
-		double aveElevation = getGroupCenter().getX();
+		//double aveElevation = getGroupCenter().getX();
+		double aveElevation = getGroupCenter().getY();
 		for (int outerIdx = 0;outerIdx < shots.size();outerIdx++){
 			
 			BenchShot currentShot = (BenchShot) getShot(outerIdx);
@@ -64,7 +65,8 @@ public class BenchTest extends Test{
 		double sd = 0.0;
 		double diffSum = 0;
 		double n = 0.0;
-		double aveWindage = getGroupCenter().getY();
+		//double aveWindage = getGroupCenter().getY();
+		double aveWindage = getGroupCenter().getX();
 		for (int outerIdx = 0;outerIdx < shots.size();outerIdx++){
 			BenchShot currentShot = (BenchShot) getShot(outerIdx);
 			if (currentShot.hasValidImpact()){
