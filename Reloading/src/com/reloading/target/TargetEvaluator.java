@@ -2,6 +2,7 @@ package com.reloading.target;
 
 import com.reloading.Constants;
 import com.reloading.browser.ReloadingLogBrowser;
+import com.reloading.components.Load;
 import com.reloading.testing.Shot;
 
 //java imports
@@ -137,6 +138,7 @@ public class TargetEvaluator extends JFrame {
 	protected JLabel witnessWidthLabel;
 	private NumberFormat targetNumberFormat;
 
+	private Load load;
 	/*************************************************************/
 	/* Constructors */
 	/*************************************************************/
@@ -146,8 +148,12 @@ public class TargetEvaluator extends JFrame {
 		this.setLayout(new BorderLayout());
 		test = new TargetEvaluatorTest();
 		myFrame = this;
+	
 	}
 
+
+	
+	
 	public TargetEvaluator(String scannedTarget) {
 		super();
 		this.setLayout(new BorderLayout());
@@ -626,6 +632,28 @@ public class TargetEvaluator extends JFrame {
 		
 	}
 
+	public void set(Load load)
+	{
+		this.load = load;
+	}
+	
+	public static void buildTargetEvaluator(Load load){
+
+		// TODO Auto-generated method stub
+		JFrame frame = new JFrame();
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showOpenDialog(frame);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			// This is where a real application would open the file.
+			// System.out.println("Opening: " + file.getAbsolutePath() + ".");
+			TargetEvaluator tEvaluator = new TargetEvaluator(file.getAbsolutePath());
+			tEvaluator.set(load);
+			tEvaluator.setVisible(true);
+		} else {
+			System.out.println("Open command cancelled by user.");
+		}
+	}
 	public void warn(String message) {
 		JOptionPane.showMessageDialog(null, message, "Error Message", JOptionPane.ERROR_MESSAGE);
 	}

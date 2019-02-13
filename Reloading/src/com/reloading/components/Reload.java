@@ -144,5 +144,9 @@ public class Reload extends Load {
 	public void setPrimer(Primer primer) {
 		this.primer = primer;
 	}
+	
+	public String toString(){
+		return this.getCartridge().toString();
+	}
 
 }

@@ -27,9 +27,10 @@ import com.reloading.exceptions.ReloadingException;
 import com.reloading.factory.Factory;
 
 public class ReloadsTab extends ReloadingLogTab {
-
+	TestPopupMenu menu; 
 	public ReloadsTab(ReloadingLogBrowser browser) {
 		super(browser);
+		menu = new TestPopupMenu(browser);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -113,7 +114,7 @@ public class ReloadsTab extends ReloadingLogTab {
 		String overAllLenthString = Float.toString(load.getOverAllLength());
 		String comment = load.getComments();
 		if (comment.length() > 25) comment = comment.substring(0, 25);
-		Object[] row = { cartridgeString, bulletString, powderString, powderMeasureSetting,primerString, caseString,overAllLenthString,comment };
+		Object[] row = { load, bulletString, powderString, powderMeasureSetting,primerString, caseString,overAllLenthString,comment };
 		tableModel.addRow(row);
 		tab.validate();
 
@@ -132,9 +133,12 @@ public class ReloadsTab extends ReloadingLogTab {
 	private class ReloadTabMouseAdapter extends MouseAdapter {
 
 		public void mouseClicked(MouseEvent e) {
+			int row = componentTable.getSelectedRow();
+
+			Reload load = (Reload) componentTable.getValueAt(row, 0);
+			
 			if (e.getClickCount() == 2) {
-				int row = componentTable.getSelectedRow();
-				Reload load = (Reload) componentTable.getValueAt(row, 0);
+				
 				//System.out.println("ID: " + load.getId());
 
 				if (ReloadsDialog.openUpdateDialog(browser.getFrame(), "Update Load", load, browser.getFactory())) {
@@ -152,9 +156,15 @@ public class ReloadsTab extends ReloadingLogTab {
 
 			}
 			else if (SwingUtilities.isRightMouseButton(e) ){
-				
+				JOptionPane.showMessageDialog(null, "Open Contextual Menu"
+						, "CONTEXTUAL MENU"
+						, JOptionPane.INFORMATION_MESSAGE);
+				}
+				menu.show(browser.frame,e.getX() + 10,e.getY() - 20);
+				menu.setLoad(load);
+				menu.setVisible(true);
 			}
 
 		}
 	}
-}
+
