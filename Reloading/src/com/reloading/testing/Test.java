@@ -82,7 +82,7 @@ public class Test implements Comparable<Test>{
 		this.id = id;
 	}
 
-	public void setLoad(Reload load) {
+	public void setLoad(Load load) {
 		this.load = load;
 	}
 

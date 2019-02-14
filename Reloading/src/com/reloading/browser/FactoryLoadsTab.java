@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -28,13 +29,17 @@ import com.reloading.factory.Factory;
 
 public class FactoryLoadsTab extends ReloadingLogTab {
 
+	TestPopupMenu menu; 
+	
 	public FactoryLoadsTab(ReloadingLogBrowser browser) {
 		super(browser);
+		menu = new TestPopupMenu(browser);
 		// TODO Auto-generated constructor stub
 	}
 
 	public FactoryLoadsTab(ReloadingLogBrowser browser, LayoutManager layout) {
 		super(browser, layout);
+		menu = new TestPopupMenu(browser);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -104,9 +109,9 @@ public class FactoryLoadsTab extends ReloadingLogTab {
 	private class FactoryLoadTabMouseAdapter extends MouseAdapter {
 
 		public void mouseClicked(MouseEvent e) {
+			int row = componentTable.getSelectedRow();
+			FactoryLoad load = (FactoryLoad) componentTable.getValueAt(row, 0);
 			if (e.getClickCount() == 2) {
-				int row = componentTable.getSelectedRow();
-				FactoryLoad load = (FactoryLoad) componentTable.getValueAt(row, 0);
 				//System.out.println("ID: " + load.getId());
 
 				if (FactoryLoadsDialog.openUpdateDialog(browser.getFrame(), "Update Load", load, browser.getFactory())) {
@@ -119,6 +124,11 @@ public class FactoryLoadsTab extends ReloadingLogTab {
 				}
 
 			}
+			else if (SwingUtilities.isRightMouseButton(e) ){
+				menu.show(componentTable,e.getX() + 10,e.getY() - 20);
+				menu.setLoad(load);
+				menu.setVisible(true);
+				}
 
 		}
 	}

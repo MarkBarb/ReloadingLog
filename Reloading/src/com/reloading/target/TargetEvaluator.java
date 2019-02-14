@@ -3,10 +3,14 @@ package com.reloading.target;
 import com.reloading.Constants;
 import com.reloading.browser.ReloadingLogBrowser;
 import com.reloading.components.Load;
+import com.reloading.exceptions.ReloadingException;
+import com.reloading.factory.Factory;
 import com.reloading.testing.Shot;
 
 //java imports
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -35,12 +39,14 @@ import java.util.PropertyResourceBundle;
 
 public class TargetEvaluator extends JFrame {
 
+	ReloadingLogBrowser manual;
 	protected PropertyResourceBundle propertyResourceBundle;
 
 	private static DecimalFormat df2 = new DecimalFormat(".##");
 	private static DecimalFormat df0 = new DecimalFormat(".");
 
 	JFrame myFrame;
+	
 	protected TargetEvaluator targetEvaluator;
 	protected TargetEvaluatorAdaptor targetEvaluatorAdaptor;
 	TargetEvaluatorPanel imagePanel;
@@ -94,7 +100,10 @@ public class TargetEvaluator extends JFrame {
 	private double witnessX = 7.5;
 	private double witnessY = 3.375;
 
-	//
+	// Controls for saving, etc
+	JPanel controlPanel;
+	JButton saveButton;
+	
 
 	// Display results of test stuff,Left hand side
 	protected JLabel groupSize;
@@ -180,6 +189,7 @@ public class TargetEvaluator extends JFrame {
 
 	public TargetEvaluator(ReloadingLogBrowser manual, String scannedTarget) {
 		super();
+		this.manual = manual;
 		this.setLayout(new BorderLayout());
 		test = new TargetEvaluatorTest();
 		myFrame = this;
@@ -286,9 +296,8 @@ public class TargetEvaluator extends JFrame {
 		this.add(imagePanel, BorderLayout.CENTER);
 
 		// controls at top panel
-		JPanel controlPanel = buildControlPanel();
+		controlPanel = buildControlPanel();
 		this.add(controlPanel, BorderLayout.NORTH);
-
 		// controls at BOTTOM of panel
 		JPanel buttonsPanel = buildButtonPanel();
 		this.add(buttonsPanel, BorderLayout.SOUTH);
@@ -441,6 +450,14 @@ public class TargetEvaluator extends JFrame {
 		controlPanel.setMinimumSize(size);
 		controlPanel.setMaximumSize(size);
 		controlPanel.setSize(size);
+		//controlPanel.setLayout();
+		saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener (){ 
+			public void actionPerformed(ActionEvent e) { 
+				save();
+			}
+		});
+		controlPanel.add(saveButton);
 		return controlPanel;
 	}
 
@@ -577,6 +594,21 @@ public class TargetEvaluator extends JFrame {
 		this.validate();
 	}
 
+	public void save(){
+		if (manual == null || test == null ) return;
+		Factory factory = manual.getFactory();
+		try {
+			if (load != null) test.setLoad(load);
+			//TODO: COPY TO APPLICATION FILE SYSTEM IF IT ISN'T THERE
+			
+			
+			
+			factory.saveTest(test);
+		} catch (ReloadingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void setTargetEvaluator(TargetEvaluator targetEvaluator) {
 		this.targetEvaluator = targetEvaluator;
 	}
@@ -589,6 +621,10 @@ public class TargetEvaluator extends JFrame {
 		this.fileName = fileName;
 	}
 
+	public void setControlVisible(boolean isVisible){
+		if (controlPanel != null) controlPanel.setVisible(isVisible);
+	}
+	
 	public void setPropertyResourceBundle(PropertyResourceBundle propertyResourceBundle) {
 		System.out.println("Setting Property Bundle");
 		this.propertyResourceBundle = propertyResourceBundle;
@@ -632,9 +668,10 @@ public class TargetEvaluator extends JFrame {
 		
 	}
 
-	public void set(Load load)
+	public void setLoad(Load load)
 	{
 		this.load = load;
+		if (test != null) test.setLoad(load);
 	}
 	
 	public void warn(String message) {
@@ -663,6 +700,7 @@ public class TargetEvaluator extends JFrame {
 				}
 			}
 			tEvaluator.setVisible(true);
+			tEvaluator.setControlVisible(false);
 		} else {
 			System.out.println("Open command cancelled by user.");
 		}

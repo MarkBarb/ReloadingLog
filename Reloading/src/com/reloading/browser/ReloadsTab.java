@@ -36,6 +36,7 @@ public class ReloadsTab extends ReloadingLogTab {
 
 	public ReloadsTab(ReloadingLogBrowser browser, LayoutManager layout) {
 		super(browser, layout);
+		menu = new TestPopupMenu(browser);
 		// TODO Auto-generated constructor stub
 	}
 

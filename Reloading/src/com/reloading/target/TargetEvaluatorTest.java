@@ -207,7 +207,8 @@ public class TargetEvaluatorTest extends BenchTest {
 		int shotNumber = shots.size() + 1;
 		Point2D convertedPoint = calculate(shotPoint);
 		TargetEvaluatorShot teShot = new TargetEvaluatorShot(shotPoint,convertedPoint);
-		teShot.setId(shotNumber);
+		//teShot.setId(shotNumber);
+		teShot.setTest(this);
 		teShot.setShotNumber(shotNumber);
 		//teShot.setVelocity(velocity);
 		addShot(teShot);
