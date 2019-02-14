@@ -637,23 +637,6 @@ public class TargetEvaluator extends JFrame {
 		this.load = load;
 	}
 	
-	public static void buildTargetEvaluator(Load load){
-
-		// TODO Auto-generated method stub
-		JFrame frame = new JFrame();
-		JFileChooser fc = new JFileChooser();
-		int returnVal = fc.showOpenDialog(frame);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			// This is where a real application would open the file.
-			// System.out.println("Opening: " + file.getAbsolutePath() + ".");
-			TargetEvaluator tEvaluator = new TargetEvaluator(file.getAbsolutePath());
-			tEvaluator.set(load);
-			tEvaluator.setVisible(true);
-		} else {
-			System.out.println("Open command cancelled by user.");
-		}
-	}
 	public void warn(String message) {
 		JOptionPane.showMessageDialog(null, message, "Error Message", JOptionPane.ERROR_MESSAGE);
 	}

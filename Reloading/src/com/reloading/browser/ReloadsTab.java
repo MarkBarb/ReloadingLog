@@ -156,13 +156,10 @@ public class ReloadsTab extends ReloadingLogTab {
 
 			}
 			else if (SwingUtilities.isRightMouseButton(e) ){
-				JOptionPane.showMessageDialog(null, "Open Contextual Menu"
-						, "CONTEXTUAL MENU"
-						, JOptionPane.INFORMATION_MESSAGE);
-				}
-				menu.show(browser.frame,e.getX() + 10,e.getY() - 20);
+				menu.show(componentTable,e.getX() + 10,e.getY() - 20);
 				menu.setLoad(load);
 				menu.setVisible(true);
+				}
 			}
 
 		}
