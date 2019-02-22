@@ -35,7 +35,7 @@ public class BenchTest extends Test{
 			}
 		}
 		if (shotCount > 0) {
-			aveVelocity = velocity/shots.size();
+			aveVelocity = velocity/shotCount;
 		}
 		return aveVelocity;
 	}

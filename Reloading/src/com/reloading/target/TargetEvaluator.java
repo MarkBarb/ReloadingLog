@@ -30,6 +30,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.text.DecimalFormat;
@@ -193,7 +195,8 @@ public class TargetEvaluator extends JFrame {
 		this.setLayout(new BorderLayout());
 		test = new TargetEvaluatorTest();
 		myFrame = this;
-
+		
+		
 		Point2D.Double witnessUpperLeft = new Point2D.Double(witnessUpperLeftX, witnessUpperLeftY);
 		test.setWitnessUpperLeft(witnessUpperLeft);
 
@@ -208,6 +211,7 @@ public class TargetEvaluator extends JFrame {
 
 		System.out.println("Into TargetEvaluator Constructor: " + scannedTarget);
 		buildGui(scannedTarget);
+		setPropertyResourceBundle(manual.getFactory().getResourceBundle());
 		// Set thelayout
 		//
 
@@ -256,6 +260,7 @@ public class TargetEvaluator extends JFrame {
 		// System.out.println("Into TargetEvaluator Constructor: " +
 		// test.getScannedTarget());
 		buildGui(scannedTarget);
+		setPropertyResourceBundle(manual.getFactory().getResourceBundle());
 		// Set thelayout
 		//
 
@@ -506,9 +511,30 @@ public class TargetEvaluator extends JFrame {
 				return false;
 			}
 			
+			
 		};
 
 		shotTable = new JTable(shotTableModel);
+		shotTable.getModel().addTableModelListener(new TableModelListener() {
+
+			  public void tableChanged(TableModelEvent e) {
+			     // your code goes here, whatever you want to do when something changes in the table
+				  System.out.println(e.toString());
+				  
+				  for (int i = 0;i<shotTable.getRowCount();i++){
+					  String strVel = shotTableModel.getValueAt(i, 3).toString();
+					  try{
+						  double velocity = Double.parseDouble(strVel);
+						  TargetEvaluatorShot shot =(TargetEvaluatorShot) test.getShot(i);
+						  shot.setVelocity(velocity);
+					  }
+					  catch(Exception ex){
+						  
+					  }
+				  }
+				  refreshVelocity();
+			  }
+			});
 		shotScrollPane = new JScrollPane(shotTable);
 
 		displayPanel.add(shotScrollPane, BorderLayout.CENTER);
@@ -564,17 +590,23 @@ public class TargetEvaluator extends JFrame {
 		refreshData();
 	}
 
-	private void refreshData() {
+	private void refreshVelocity(){
 
-		if (clickCount > 2) {
-			groupSize.setText("GroupSize: " + df2.format(test.getGroupSize()));
-			Point2D center = test.getGroupCenter();
-			groupCenter.setText("GroupCenter: " + df2.format(center.getX()) + "," + df2.format(center.getY()));
-			stdGroup.setText("windSD: " + df2.format(test.getWindageSD()) + "  eleSD: " + df2.format(test.getElevationSD()));
+		if (test.getShotCount() > 2) {
 			if (test.getAverageVelocity() > 0) {
 				aveVelocity.setText("Ave Velocity: " + df0.format(test.getAverageVelocity()));
 				stdVelocity.setText("Std Velocity: " + df2.format(test.getVelocitySD()));
 			}
+		}
+	}
+	private void refreshData() {
+
+		if (test.getShotCount() > 2) {
+			groupSize.setText("GroupSize: " + df2.format(test.getGroupSize()));
+			Point2D center = test.getGroupCenter();
+			groupCenter.setText("GroupCenter: " + df2.format(center.getX()) + "," + df2.format(center.getY()));
+			stdGroup.setText("windSD: " + df2.format(test.getWindageSD()) + "  eleSD: " + df2.format(test.getElevationSD()));
+			
 
 		}
 		shotTableModel.setRowCount(0);
@@ -626,13 +658,14 @@ public class TargetEvaluator extends JFrame {
 	}
 	
 	public void setPropertyResourceBundle(PropertyResourceBundle propertyResourceBundle) {
-		System.out.println("Setting Property Bundle");
+		//ystem.out.println("Setting Property Bundle");
 		this.propertyResourceBundle = propertyResourceBundle;
-		
+		if (propertyResourceBundle == null) return;
 		witnessUpperLeftX = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_LEFT_X_KEY));
 		witnessUpperLeftY = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_LEFT_Y_KEY));
 		Point2D.Double witnessUpperLeft = new Point2D.Double(witnessUpperLeftX, witnessUpperLeftY);
-		test.setWitnessUpperLeft(witnessUpperLeft);System.out.println("Setting UL: " + Integer.toString(witnessUpperLeftX) + "," + Integer.toString(witnessUpperLeftY));
+		test.setWitnessUpperLeft(witnessUpperLeft);
+		System.out.println("Setting UL: " + Integer.toString(witnessUpperLeftX) + "," + Integer.toString(witnessUpperLeftY));
 		witnessUpperLeftLabel.setText(Integer.toString(witnessUpperLeftX) + "," + Integer.toString(witnessUpperLeftY));
 		
 		witnessUpperRightX = Integer.parseInt(propertyResourceBundle.getString(WITNESS_UPPER_RIGHT_X_KEY));

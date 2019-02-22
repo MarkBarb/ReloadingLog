@@ -47,6 +47,10 @@ public abstract class Factory {
 		this.propertyResourceBundle = propertyResourceBundle;
 	}
 	
+	public PropertyResourceBundle getResourceBundle() {
+		return propertyResourceBundle;
+	}
+	
 	/****************************************************************/
 	/*                                                              */
 	/****************************************************************/
